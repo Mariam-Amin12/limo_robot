@@ -1,0 +1,59 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+    Splitter Ratio: 0.5
+  - Class: rviz/Views
+    Name: Views
+    Splitter Ratio: 0.5
+
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Grid
+      Name: Grid
+      Enabled: true
+      
+    - Class: rviz/RobotModel
+      Name: RobotModel
+      Enabled: true
+      Robot Description: robot_description
+      
+    - Class: rviz/LaserScan
+      Name: LaserScan
+      Topic: /limo/scan
+      Enabled: true
+      Color: 255; 0; 0
+      Size: 0.05
+      
+    - Class: rviz/Map
+      Name: Map
+      Topic: /map
+      Enabled: true
+      Color Scheme: map
+      
+    - Class: rviz/TF
+      Name: TF
+      Enabled: true
+      
+  Global Options:
+    Fixed Frame: map
+    
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Name: Orbit
+      Distance: 10.0
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.06
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 1.5708
+      Target Frame: <Fixed Frame>
+      Yaw: 0
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
