@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <sdf version="1.7">
   <model name="wall_3_x">
+   <static>true</static>
     <link name="link">
       <collision name="collision">
         <geometry>
