@@ -1,0 +1,72 @@
+<launch>
+    
+  <arg name="gui" default="true"/>
+  <arg name="robot_namespace" default="/"/>
+  <arg name="x" default="0.5"/>
+  <arg name="y" default="0.5"/>
+  <arg name="z" default="0.0"/>
+  <arg name="yaw" default="0.0"/>
+
+  <!-- Load the world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find robotics_project_pkg)/worlds/test_world_1.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- Load robot description -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find limo_description)/urdf/limo_four_diff.xacro'
+      robot_namespace:=$(arg robot_namespace)" />
+
+  <!-- Spawn LIMO robot in the world -->
+  <node name="spawn_limo_model" pkg="gazebo_ros" type="spawn_model" args="-x $(arg x)
+            -y $(arg y)
+            -z $(arg z)
+            -Y $(arg yaw)
+            -unpause
+            -urdf
+            -param robot_description
+            -model 'limo$(arg robot_namespace)'" />
+
+  <!-- Load controller configurations -->
+  <rosparam file="$(find limo_gazebo_sim)/config/limo_four_diff_control.yaml" command="load"/>
+
+  <!-- Spawn controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+      respawn="false" output="screen"
+      args="limo_state_controller diff_drive_controller"/>
+
+  <!-- Publish robot state -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <!-- SLAM - Hector SLAM for mapping -->
+  <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
+    <param name="map_frame" value="map"/>
+    <param name="base_frame" value="base_link"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_resolution" value="0.05"/>
+    <param name="map_size" value="2048"/>
+    <remap from="scan" to="/limo/scan"/>
+  </node>
+  <param name="use_sim_time" value="true"/>
+  <node pkg="move_base" type="move_base" name="move_base" output="screen">
+      <param name="controller_frequency" value="10.0"/>
+      <param name="transform_tolerance" value="0.3"/>
+      <rosparam file="$(find robotics_project_pkg)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find robotics_project_pkg)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find robotics_project_pkg)/config/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find robotics_project_pkg)/config/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find robotics_project_pkg)/config/base_local_planner_params.yaml" command="load" />
+  </node>
+
+  <node pkg="robotics_project_pkg" type="explore.py" name="explorer" output="screen"/>
+
+  <!-- Visualize in RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotics_project_pkg)/rviz/slam_config.rviz" />
+
+
+
+</launch>

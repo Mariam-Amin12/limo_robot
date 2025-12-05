@@ -1,0 +1,36 @@
+# slam_toolbox_params.yaml
+# Ensure this file is placed in robotics_project_pkg/config/
+
+# ROS 1 SLAM Toolbox
+slam_toolbox:
+  ros__parameters:
+    # Frame definitions
+    base_frame: base_link
+    odom_frame: odom
+    map_frame: map
+    
+    # Laser scan input topic
+    scan_topic: /scan 
+    
+    # Use simulation time (must match <param name="use_sim_time" value="true"/>)
+    use_sim_time: true
+    
+    # Run in asynchronous mode (good for real robots) or synchronous (good for simulations)
+    mode: 'synchronous' 
+    
+    # Map parameters
+    map_start_pose: [0.0, 0.0, 0.0]
+    map_size_x: 20.0
+    map_size_y: 20.0
+    map_resolution: 0.05
+    
+    # Sensor filters (adjust based on your Lidar specs)
+    minimum_travel_distance: 0.2
+    minimum_travel_heading: 0.1
+    max_laser_range: 8.0 
+    
+    # Odometry configuration
+    transform_publish_period: 0.05
+    
+    # Initial localization (if you were starting from a known map)
+    # initial_map_pose: [0.0, 0.0, 0.0]

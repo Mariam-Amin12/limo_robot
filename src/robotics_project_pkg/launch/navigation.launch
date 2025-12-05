@@ -1,0 +1,17 @@
+<launch>
+    <arg name="use_sim_time" default="true"/>
+    
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Robot base frame -->
+    <param name="base_global_frame" value="map"/>
+    <param name="base_local_frame" value="odom"/>
+    <param name="robot_base_frame" value="base_footprint"/>
+
+    <node pkg="move_base" type="move_base" name="move_base" output="screen">
+        <rosparam file="$(find limo_navigation)/config/costmap_common_params.yaml" command="load"/>
+        <rosparam file="$(find limo_navigation)/config/local_costmap_params.yaml" command="load" ns="local_costmap"/>
+        <rosparam file="$(find limo_navigation)/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+        <rosparam file="$(find limo_navigation)/config/base_local_planner_params.yaml" command="load"/>
+    </node>
+</launch>
