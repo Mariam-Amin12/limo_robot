@@ -1,5 +1,47 @@
 global_costmap:
+  # --- Frame Configuration ---
   global_frame: map
-  robot_base_frame: base_link
+  robot_base_frame: base_footprint # Already correct from previous fix
   update_frequency: 5.0
-  static_map: true
+  publish_frequency: 5.0
+  transform_tolerance: 0.5
+
+  # --- CRITICAL CHANGES FOR EXPLORATION ---
+  # Disable static map reliance so it doesn't get stuck on an initial, small map.
+  static_map: False
+  # Enable rolling window so the map is always centered on the robot and expands.
+  rolling_window: True
+  # Set a large initial width/height for exploration (adjust as needed).
+  width: 20.0
+  height: 20.0
+  resolution: 0.05
+  
+  # --- Costmap Layer Configuration ---
+  # The plugins block is needed when you use rolling_window: True
+  plugins:
+    - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+
+  # --- Obstacle Layer Parameters (Keep these consistent) ---
+  obstacle_layer:
+    # Sensor source for obstacles and clearing
+    observation_sources: laser_scan_sensor
+    
+    # Laser Scan Sensor settings (Ensure the topic is correct, as it was in your move_base summary)
+    laser_scan_sensor:
+      topic: /limo/scan
+      sensor_frame: laser_link
+      data_type: LaserScan
+      expected_update_rate: 10.0
+      marking: True
+      clearing: True
+      min_obstacle_height: 0.0
+      max_obstacle_height: 2.0
+      
+    obstacle_range: 3.0
+    raytrace_range: 4.0
+
+  # --- Inflation Layer Parameters ---
+  inflation_layer:
+    inflation_radius: 0.5
+    cost_scaling_factor: 10.0

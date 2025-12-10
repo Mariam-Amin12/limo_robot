@@ -1,0 +1,66 @@
+<launch>
+    
+  <arg name="gui" default="true"/>
+  <arg name="robot_namespace" default="/"/>
+  <arg name="x" default="0.5"/>
+  <arg name="y" default="0.5"/>
+  <arg name="z" default="0.0"/>
+  <arg name="yaw" default="0.0"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find robotics_project_pkg)/worlds/test_world_1.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find limo_description)/urdf/limo_four_diff.xacro'
+    robot_namespace:=$(arg robot_namespace)" />
+
+  <node name="spawn_limo_model" pkg="gazebo_ros" type="spawn_model" args="-x $(arg x)
+    -y $(arg y)
+    -z $(arg z)
+    -Y $(arg yaw)
+    -unpause
+    -urdf
+    -param robot_description
+    -model 'limo$(arg robot_namespace)'" />
+
+  <rosparam file="$(find limo_gazebo_sim)/config/limo_four_diff_control.yaml" command="load"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+    respawn="false" output="screen"
+    args="limo_state_controller diff_drive_controller"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <arg name="slam_mode" default="mapping"/>
+  <node pkg="slam_toolbox" type="sync_slam_toolbox_node" name="slam_toolbox" output="screen">
+    <remap from="/scan" to="/limo/scan"/> 
+    <rosparam file="$(find robotics_project_pkg)/config/slam_toolbox_params.yaml" command="load" />
+  </node>
+  <param name="use_sim_time" value="true"/>
+
+  <node pkg="move_base" type="move_base" name="move_base" output="screen">
+    <param name="controller_frequency" value="10.0"/>
+    <param name="transform_tolerance" value="0.3"/>
+      
+    <param name="odom_used" value="true"/> 
+      
+    <rosparam file="$(find robotics_project_pkg)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find robotics_project_pkg)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      
+    <rosparam file="$(find robotics_project_pkg)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find robotics_project_pkg)/config/global_costmap_params.yaml" command="load" />
+      
+    <rosparam file="$(find robotics_project_pkg)/config/base_local_planner_params.yaml" command="load" />
+  </node>
+
+  <node pkg="explore_lite" type="explore" respawn="true" name="explore_lite" output="screen">
+    <rosparam file="$(find robotics_project_pkg)/config/explore_lite_params.yaml" command="load" />
+    <remap from="costmap" to="/move_base/global_costmap/costmap"/>
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotics_project_pkg)/rviz/slam_config.rviz" />
+
+</launch>
