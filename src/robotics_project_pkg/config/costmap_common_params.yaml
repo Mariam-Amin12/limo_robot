@@ -1,18 +1,39 @@
-footprint: [[0.20, 0.15], [0.20, -0.15], [-0.20, -0.15], [-0.20, 0.15]]
-obstacle_range: 3.0
-raytrace_range: 4.0
-inflation_radius: 0.50
-cost_scaling_factor: 10.0
-robot_radius: 0.20
-observation_sources: laser_scan_sensor
+# 1. Robot Geometry and Global Setup
+footprint: [[0.14, 0.14], [0.14, -0.14], [-0.14, -0.14], [-0.14, 0.14]] 
 
+# (Often used as an alternative to footprint for circular robots)
+
+# 2. Frame and Window Settings
+global_frame: map
+# Defines the name of the frame which contains the occupancy grid map.
+robot_base_frame: base_footprint
+# Defines the name of the robot base.
+rolling_window: true
+# Parameter setting true selects robot_base_frame as a middle of the cost map. 
+# (This is typical for the local costmap which moves with the robot.)
+
+# 3. Collision and Cost Parameters
+inflation_radius: 0.30
+# Determines from what distance from the obstacle, take into account the cost.
+# Any distance less than indicated (0.50m) will be included as an additional cost.
+cost_scaling_factor: 4.0
+
+# 4. Unknown Space and Sensor Handling
+track_unknown_space: true
+# True value adds a third value to the cost map (unknown). 
+# This occurs if the sensor data does not cover part of the area (e.g., around a corner).
+observation_sources: laser_scan_sensor
+# Define properties of used sensor (named laser_scan_sensor).
+
+# 5. Sensor Definition (laser_scan_sensor)
 laser_scan_sensor: 
-  topic: /limo/scan
-  sensor_frame: laser_link
-  data_type: LaserScan
-  marking: true
-  clearing: true
-  expected_update_rate: 10.0
-  observation_persistence: 0.0
-  max_obstacle_height: 2.0
-  min_obstacle_height: 0.0
+ topic: /limo/scan
+ # Name of topic where sensor data is published.
+ sensor_frame: laser_link
+ # Name of sensor frame.
+ data_type: LaserScan
+ # Type of message published by sensor (LaserScan).
+ marking: true
+ # True if sensor can be used to mark area as occupied.
+ clearing: true
+ 

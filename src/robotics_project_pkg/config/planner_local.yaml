@@ -1,0 +1,38 @@
+base_local_planner: base_local_planner/TrajectoryPlannerROS
+
+TrajectoryPlannerROS:
+  # --- 1. Velocity and Motion Limits ---
+  min_vel_x: 0.1             # Minimum translational speed (m/s). Keeps robot moving.
+  # ADJUSTMENT 1: Decreased max_vel_x slightly to reduce required stopping distance
+  max_vel_x: 0.25            # Maximum translational speed (m/s). Was 0.3.
+  min_vel_theta: -0.7        # Minimum rotational speed (rad/s).
+  max_vel_theta: 0.7         # Maximum rotational speed (rad/s).
+  min_in_place_vel_theta: 0.4 # Minimum speed for rotating in place. A decent value.
+  escape_vel: -0.1           # Speed used when escaping from an obstacle (negative for backwards motion).
+
+  # --- 2. Acceleration Limits ---
+  acc_lim_theta: 1.0         # Maximum rotational acceleration (rad/s^2).
+  acc_lim_x: 1.0             # Maximum translational acceleration (m/s^2).
+
+  # --- 3. Kinematic Type ---
+  holonomic_robot: false     # Set to false for a differential drive robot (correct).
+
+  # --- 4. Goal Reaching Tolerances ---
+  xy_goal_tolerance: 0.1     # Distance threshold to consider the X,Y goal reached (0.1m).
+  yaw_goal_tolerance: 0.2    # Angular threshold to consider the orientation goal reached (0.2 rad).
+
+  # --- 5. Scoring and Bias (Cost Function Weights) ---
+  meter_scoring: true        # ESSENTIAL FIX: Makes scores robust against changes in costmap resolution.
+  
+  # ADJUSTMENT 2: Increased path_distance_bias to prioritize staying on the global path more strongly.
+  path_distance_bias: 30     # Weight for staying close to the global plan. Increased from 20 to 30.
+  
+  goal_distance_bias: 15     # Weight for moving towards the local goal/endpoint.
+  
+  # CRUCIAL FOR OSCILLATION: If rotational velocity drops below this, the robot is considered stopped.
+  rot_stopped_vel: 0.001     # Ensures the spinning cycle is broken by recognizing it's stopped.
+  
+  occdist_scale: 0.005        # Weight for obstacle clearance (costmap distance).
+
+  # --- 6. Planning Window ---
+  sim_time: 2.0              # How far into the future (in seconds) the planner looks to simulate trajectories.

@@ -1,0 +1,160 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+    Splitter Ratio: 0.5
+  - Class: rviz/Views
+    Name: Views
+    Splitter Ratio: 0.5
+
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 1
+      
+    # Robot 1
+    - Class: rviz/RobotModel
+      Name: Robot1 Model
+      Enabled: true
+      Robot Description: /robot1/robot_description
+      TF Prefix: robot1
+      Visual Enabled: true
+      Collision Enabled: false
+      
+    - Class: rviz/LaserScan
+      Name: Robot1 LaserScan
+      Topic: /robot1/limo/scan
+      Enabled: true
+      Color: 255; 0; 0
+      Size: 0.05
+      Style: Points
+      
+    - Class: rviz/Map
+      Name: Robot1 Map
+      Topic: /robot1/map
+      Enabled: true
+      Color Scheme: map
+      Draw Behind: false
+      Alpha: 0.7
+      Use Timestamp: false
+      
+    # Robot 2
+    - Class: rviz/RobotModel
+      Name: Robot2 Model
+      Enabled: true
+      Robot Description: /robot2/robot_description
+      TF Prefix: robot2
+      Visual Enabled: true
+      Collision Enabled: false
+      
+    - Class: rviz/LaserScan
+      Name: Robot2 LaserScan
+      Topic: /robot2/limo/scan
+      Enabled: true
+      Color: 0; 255; 0
+      Size: 0.05
+      Style: Points
+      
+    - Class: rviz/Map
+      Name: Robot2 Map
+      Topic: /robot2/map
+      Enabled: true
+      Color Scheme: map
+      Draw Behind: false
+      Alpha: 0.7
+      Use Timestamp: false
+      
+    # Robot 3
+    - Class: rviz/RobotModel
+      Name: Robot3 Model
+      Enabled: true
+      Robot Description: /robot3/robot_description
+      TF Prefix: robot3
+      Visual Enabled: true
+      Collision Enabled: false
+      
+    - Class: rviz/LaserScan
+      Name: Robot3 LaserScan
+      Topic: /robot3/limo/scan
+      Enabled: true
+      Color: 0; 0; 255
+      Size: 0.05
+      Style: Points
+      
+    - Class: rviz/Map
+      Name: Robot3 Map
+      Topic: /robot3/map
+      Enabled: true
+      Color Scheme: map
+      Draw Behind: false
+      Alpha: 0.7
+      Use Timestamp: false
+      
+    # TF for all robots
+    - Class: rviz/TF
+      Name: TF
+      Enabled: true
+      Show Names: true
+      Show Axes: true
+      Show Arrows: true
+      Marker Scale: 0.3
+      
+    # Paths (if available)
+    - Class: rviz/Path
+      Name: Robot1 Path
+      Topic: /robot1/move_base/NavfnROS/plan
+      Enabled: false
+      Color: 255; 0; 0
+      Line Style: Lines
+      
+    - Class: rviz/Path
+      Name: Robot2 Path
+      Topic: /robot2/move_base/NavfnROS/plan
+      Enabled: false
+      Color: 0; 255; 0
+      Line Style: Lines
+      
+    - Class: rviz/Path
+      Name: Robot3 Path
+      Topic: /robot3/move_base/NavfnROS/plan
+      Enabled: false
+      Color: 0; 0; 255
+      Line Style: Lines
+      
+  Global Options:
+    Fixed Frame: robot1/map
+    Background Color: 48; 48; 48
+    
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Name: Orbit
+      Distance: 25.0
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.06
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 1.0472
+      Target Frame: <Fixed Frame>
+      Yaw: 0.785398
+      Focal Point:
+        X: 7.5
+        Y: 7.5
+        Z: 0
+
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1200
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a000003f8fc0200000008fb0000001200530063007200650065006e0000000000000003f8000000000000000afb0000001e0054006f006f006c002000500072006f007000650072007400690065007300000000000000016a0000006700fffffffc000000420000022a000000fb0100001cfa000000020100000002fb0000000e0044006900730070006c006100790073010000000000000175000000dd00fffffffb0000001000540065006d0070006f0072006100720079010000017500000289000000000000000000000001000002890000038cfc0200000001fb0000001e0054006f006f006c002000500072006f007000650072007400690065007300000001fb000000160000000000000000000000040000000000000000fc0000000000fffffffc00000000000000ff0000000000fffffffafffffffa000000020100000001fb0000001a0054006900740065006c00650050006100720074006900630075006c0061007200010000000ffffffff0000001600fffffffb0000001200530063007200650065006e000000000ffffffff0000000000000000000003f800000004000000040000000800000008fc00000000
+  Views:
+    collapsed: false
+  Width: 1600
+

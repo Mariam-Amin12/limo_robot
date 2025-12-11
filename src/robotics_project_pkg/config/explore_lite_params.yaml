@@ -1,19 +1,12 @@
-explore_server:
-  # Topics and frame names
-  robot_base_frame: base_footprint # The frame of your robot base (usually 'base_link')
-  costmap_topic: /move_base/global_costmap/costmap # The global costmap topic from move_base
-  costmap_updates_topic: /move_base/global_costmap/costmap_updates # Costmap updates (optional, but good for efficiency)
-  
-  # Parameters for goal selection and frontiers
-  planner_frequency: 1.0 # How often to check for new frontiers (Hz)
-  goal_aliasing: 1.0 # Minimum distance between two frontier points to be considered different
-  potential_scale: 1.0 # Weight for costmap potential
-  orientation_scale: 0.0 # Weight for robot orientation (usually 0 for full exploration)
-  gain_scale: 1.0 # Weight for the frontier gain (size/distance)
 
-  # Parameters related to move_base
-  # The explorer will publish goals to this action server
-  move_base_client_topic: move_base 
-  
-  # A safety buffer/clearing radius (meters)
-  min_frontier_size: 0.25 # Minimum size of a frontier cluster to be considered for exploration
+robot_base_frame: base_footprint
+costmap_topic: map
+costmap_updates_topic: map_updates
+visualize: true
+planner_frequency: 0.4
+progress_timeout: 30.0
+potential_scale: 3.0
+orientation_scale: 0.0
+gain_scale: 1.0
+transform_tolerance: 0.3
+min_frontier_size: 0.7
