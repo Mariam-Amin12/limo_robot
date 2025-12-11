@@ -6,7 +6,7 @@ footprint: [[0.14, 0.14], [0.14, -0.14], [-0.14, -0.14], [-0.14, 0.14]]
 # 2. Frame and Window Settings
 global_frame: map
 # Defines the name of the frame which contains the occupancy grid map.
-robot_base_frame: base_footprint
+robot_base_frame: base_link
 # Defines the name of the robot base.
 rolling_window: true
 # Parameter setting true selects robot_base_frame as a middle of the cost map. 
