@@ -55,8 +55,8 @@
                 </noise>
               </ray>
               <plugin name="gazebo_ros_laser_sensor" filename="libgazebo_ros_laser.so">
-                <topicName>scan</topicName> <!-- <topicName>/limo/scan</topicName> -->
-                <frameName>laser_link</frameName>
+                <topicName>limo/scan</topicName>
+                <frameName>${frame_prefix}_link</frameName>
               </plugin>
             </sensor>
           </gazebo>
@@ -94,8 +94,8 @@
               <depthImageTopicName>depth/image_raw</depthImageTopicName>
               <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
               <pointCloudTopicName>depth/points</pointCloudTopicName>
-              <frameName>depth_link</frameName>
-              <cameraname>depth_camera_link</cameraname>
+              <frameName>${frame_prefix}_depth_link</frameName>
+              <cameraname>${frame_prefix}_link</cameraname>
               
               <pointCloudCutoff>0.5</pointCloudCutoff>
               <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
@@ -129,7 +129,7 @@
             <gaussianNoise>0.001</gaussianNoise>
             <xyzOffset>0 0 0</xyzOffset>
             <rpyOffset>0 0 0</rpyOffset>
-            <frameName>imu_link</frameName>
+            <frameName>${frame_prefix}_link</frameName>
           </plugin>
           <pose>0 0 0 0 0 0</pose>
         </sensor>

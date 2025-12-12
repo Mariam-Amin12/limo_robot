@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <robot name="limo_xacro" xmlns:xacro="http://ros.org/wiki/xacro">
+    
+    <xacro:arg name="robot_namespace" default="robot"/>
+    <xacro:property name="ns" value="$(arg robot_namespace)"/>
+
     <xacro:macro name="limo_wheel" params="parent_prefix wheel_prefix reflect *joint_pose">
         <link name="${wheel_prefix}_wheel_link">
             <inertial>
@@ -53,7 +57,7 @@
                     <specular>0 0 0 0</specular>
                     <emissive>0 0 0 1</emissive>
                 </material>
-            </visual>
+            </visual>   
             <collision name='laser_collision'>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
@@ -61,13 +65,14 @@
                 </geometry>
             </collision>
         </link>
-        <joint type="fixed" name="laser_joint">
+        <joint type="fixed" name="${frame_prefix}_joint">
             <xacro:insert_block name="joint_pose"/>
             <child link="${frame_prefix}_link"/>
             <parent link="${parent_prefix}"/>
         </joint>
         <gazebo reference="${frame_prefix}_link">
             <material>Gazebo/Yellow</material>
+           
         </gazebo>
     </xacro:macro>
 
@@ -103,17 +108,16 @@
             </collision>
         </link>
     
-        <joint type="fixed" name="depth_camera_joint">
+        <joint type="fixed" name="${frame_prefix}_joint">
             <xacro:insert_block name="joint_pose"/>
             <child link="${frame_prefix}_link"/>
             <parent link="${parent_prefix}"/>
         </joint>
-        <link name="depth_link"></link>
-
+        <link name="${frame_prefix}_depth_link"></link>
         <joint name="${frame_prefix}_to_camera_joint" type="fixed">
             <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2} "/>
             <parent link="${frame_prefix}_link"/>
-            <child link="depth_link"/>
+            <child link="${frame_prefix}_depth_link"/>
           </joint>
 
         <gazebo reference="${frame_prefix}_link">
@@ -152,7 +156,7 @@
                 </geometry>
             </collision>
         </link>
-        <joint type="fixed" name="imu_joint">
+        <joint type="fixed" name="${frame_prefix}_joint">
             <xacro:insert_block name="joint_pose"/>
             <child link="${frame_prefix}_link"/>
             <parent link="${parent_prefix}"/>
