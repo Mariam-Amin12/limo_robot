@@ -175,13 +175,23 @@ Visualization Manager:
           Value: true
         robot1_depth_camera_link:
           Value: true
+        robot1_front_left_wheel_link:
+          Value: true
+        robot1_front_right_wheel_link:
+          Value: true
         robot1_imu_link:
           Value: true
         robot1_inertial_link:
           Value: true
         robot1_laser_link:
           Value: true
+        robot1_map:
+          Value: true
         robot1_odom:
+          Value: true
+        robot1_rear_left_wheel_link:
+          Value: true
+        robot1_rear_right_wheel_link:
           Value: true
         robot2_base_footprint:
           Value: true
@@ -191,13 +201,23 @@ Visualization Manager:
           Value: true
         robot2_depth_camera_link:
           Value: true
+        robot2_front_left_wheel_link:
+          Value: true
+        robot2_front_right_wheel_link:
+          Value: true
         robot2_imu_link:
           Value: true
         robot2_inertial_link:
           Value: true
         robot2_laser_link:
           Value: true
+        robot2_map:
+          Value: true
         robot2_odom:
+          Value: true
+        robot2_rear_left_wheel_link:
+          Value: true
+        robot2_rear_right_wheel_link:
           Value: true
         robot3_base_footprint:
           Value: true
@@ -207,13 +227,23 @@ Visualization Manager:
           Value: true
         robot3_depth_camera_link:
           Value: true
+        robot3_front_left_wheel_link:
+          Value: true
+        robot3_front_right_wheel_link:
+          Value: true
         robot3_imu_link:
           Value: true
         robot3_inertial_link:
           Value: true
         robot3_laser_link:
           Value: true
+        robot3_map:
+          Value: true
         robot3_odom:
+          Value: true
+        robot3_rear_left_wheel_link:
+          Value: true
+        robot3_rear_right_wheel_link:
           Value: true
       Marker Alpha: 1
       Marker Scale: 1
@@ -223,42 +253,69 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
-          robot1_odom:
-            robot1_base_footprint:
-              robot1_base_link:
-                robot1_depth_camera_link:
-                  robot1_depth_camera_depth_link:
+          robot1_map:
+            robot1_odom:
+              {}
+          robot2_map:
+            robot2_odom:
+              robot2_base_footprint:
+                robot2_base_link:
+                  robot2_depth_camera_link:
+                    robot2_depth_camera_depth_link:
+                      {}
+                  robot2_front_left_wheel_link:
                     {}
-                robot1_imu_link:
-                  {}
-                robot1_inertial_link:
-                  {}
-                robot1_laser_link:
-                  {}
-          robot2_odom:
-            {}
-          robot3_odom:
-            robot3_base_footprint:
-              robot3_base_link:
-                robot3_depth_camera_link:
-                  robot3_depth_camera_depth_link:
+                  robot2_front_right_wheel_link:
                     {}
-                robot3_imu_link:
-                  {}
-                robot3_inertial_link:
-                  {}
-                robot3_laser_link:
-                  {}
-        robot2_base_footprint:
-          robot2_base_link:
-            robot2_depth_camera_link:
-              robot2_depth_camera_depth_link:
+                  robot2_imu_link:
+                    {}
+                  robot2_inertial_link:
+                    {}
+                  robot2_laser_link:
+                    {}
+                  robot2_rear_left_wheel_link:
+                    {}
+                  robot2_rear_right_wheel_link:
+                    {}
+          robot3_map:
+            robot3_odom:
+              robot3_base_footprint:
+                robot3_base_link:
+                  robot3_depth_camera_link:
+                    robot3_depth_camera_depth_link:
+                      {}
+                  robot3_front_left_wheel_link:
+                    {}
+                  robot3_front_right_wheel_link:
+                    {}
+                  robot3_imu_link:
+                    {}
+                  robot3_inertial_link:
+                    {}
+                  robot3_laser_link:
+                    {}
+                  robot3_rear_left_wheel_link:
+                    {}
+                  robot3_rear_right_wheel_link:
+                    {}
+        robot1_base_footprint:
+          robot1_base_link:
+            robot1_depth_camera_link:
+              robot1_depth_camera_depth_link:
                 {}
-            robot2_imu_link:
+            robot1_front_left_wheel_link:
               {}
-            robot2_inertial_link:
+            robot1_front_right_wheel_link:
               {}
-            robot2_laser_link:
+            robot1_imu_link:
+              {}
+            robot1_inertial_link:
+              {}
+            robot1_laser_link:
+              {}
+            robot1_rear_left_wheel_link:
+              {}
+            robot1_rear_right_wheel_link:
               {}
       Update Interval: 0
       Value: true
@@ -434,7 +491,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 19.93499755859375
+      Distance: 10.20905876159668
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -442,17 +499,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 3.4873459339141846
-        Y: 4.131113529205322
-        Z: -1.4383714199066162
+        X: 2.2438621520996094
+        Y: 2.7793893814086914
+        Z: -1.747620940208435
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7697964310646057
+      Pitch: 0.24020373821258545
       Target Frame: <Fixed Frame>
-      Yaw: 2.5672168731689453
+      Yaw: 4.6422119140625
     Saved: ~
 Window Geometry:
   Displays:
@@ -471,4 +528,4 @@ Window Geometry:
     collapsed: true
   Width: 1853
   X: -32
-  Y: -32
+  Y: -31
