@@ -11,9 +11,9 @@ class ReactiveExplorer:
     def __init__(self):
         rospy.init_node('reactive_explorer')
 
-        self.cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        self.cmd_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
         # Subscribe to the scan topic
-        rospy.Subscriber('/limo/scan', LaserScan, self.scan_callback)
+        rospy.Subscriber('limo/scan', LaserScan, self.scan_callback)
 
         # Initialize state variables
         self.front_distance = 1.0

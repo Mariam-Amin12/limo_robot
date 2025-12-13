@@ -55,7 +55,8 @@
                 </noise>
               </ray>
               <plugin name="gazebo_ros_laser_sensor" filename="libgazebo_ros_laser.so">
-                <topicName>limo/scan</topicName>
+                <!-- CHANGED: Publish to "scan" instead of "limo/scan" -->
+                <topicName>scan</topicName>
                 <frameName>${frame_prefix}_link</frameName>
               </plugin>
             </sensor>
@@ -89,7 +90,7 @@
                 will control the frame rate. -->
               <updateRate>0.0</updateRate>
               <cameraName>camera_ir</cameraName>
-              <imageTopicName>color/image_raw</imageTopicName> <!-- removed /limo/ -->
+              <imageTopicName>color/image_raw</imageTopicName>
               <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
               <depthImageTopicName>depth/image_raw</depthImageTopicName>
               <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
