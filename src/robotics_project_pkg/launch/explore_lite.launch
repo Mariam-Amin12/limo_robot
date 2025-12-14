@@ -1,5 +1,8 @@
 <launch>
-    
+
+  <!-- Set GAZEBO_MODEL_PATH to include the models directory -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find robotics_project_pkg)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+      
   <arg name="gui" default="true"/>
   <arg name="robot_namespace" default="/"/>
   <arg name="x" default="0.5"/>
