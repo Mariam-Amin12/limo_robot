@@ -207,7 +207,7 @@ Visualization Manager:
       Draw Behind: true
       Enabled: true
       Name: Map
-      Topic: /merged_map
+      Topic: /map
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -287,7 +287,7 @@ Visualization Manager:
       Marker Topic: /explore_lite/frontiers
       Name: MarkerArray
       Namespaces:
-        {}
+        frontiers: true
       Queue Size: 100
       Value: true
   Enabled: true
@@ -355,4 +355,4 @@ Window Geometry:
     collapsed: true
   Width: 1853
   X: -32
-  Y: -23
+  Y: -32

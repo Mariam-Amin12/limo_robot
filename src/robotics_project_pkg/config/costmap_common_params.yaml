@@ -1,39 +1,51 @@
-# 1. Robot Geometry and Global Setup
-footprint: [[0.14, 0.14], [0.14, -0.14], [-0.14, -0.14], [-0.14, 0.14]] 
+# ============================================
+# COSTMAP CONFIGURATION (CLEANED)
+# ============================================
 
-# (Often used as an alternative to footprint for circular robots)
+# 1. Robot Geometry
+footprint: [[-0.16, -0.11], [-0.16, 0.11], [0.16, 0.11], [0.16, -0.11]]
+footprint_padding: 0.02
 
-# 2. Frame and Window Settings
+# 2. Frame Settings
 global_frame: map
-# Defines the name of the frame which contains the occupancy grid map.
 robot_base_frame: base_link
-# Defines the name of the robot base.
 rolling_window: true
-# Parameter setting true selects robot_base_frame as a middle of the cost map. 
-# (This is typical for the local costmap which moves with the robot.)
+transform_tolerance: 0.2
 
-# 3. Collision and Cost Parameters
-inflation_radius: 0.30
-# Determines from what distance from the obstacle, take into account the cost.
-# Any distance less than indicated (0.50m) will be included as an additional cost.
-cost_scaling_factor: 4.0
-
-# 4. Unknown Space and Sensor Handling
-track_unknown_space: true
-# True value adds a third value to the cost map (unknown). 
-# This occurs if the sensor data does not cover part of the area (e.g., around a corner).
+# 3. General Settings
+always_send_full_costmap: true
 observation_sources: laser_scan_sensor
-# Define properties of used sensor (named laser_scan_sensor).
 
-# 5. Sensor Definition (laser_scan_sensor)
+# ========================================
+# LAYER CONFIGURATIONS
+# ========================================
+
+# STATIC LAYER
+static_layer:
+  enabled: true
+  map_topic: "/map"
+
+# OBSTACLE LAYER
+obstacle_layer:
+  enabled: true
+  obstacle_range: 3.0         # How far to detect obstacles
+  raytrace_range: 4.0         # How far to clear space
+  track_unknown_space: true
+  combination_method: 1
+  # REMOVED inflation_radius from here (belongs in inflation_layer only)
+
+# INFLATION LAYER - FIXED!
+inflation_layer:
+  enabled: true
+  inflation_radius: 0.4       # FIXED: Single consistent value (was 0.5 and 0.2)
+  cost_scaling_factor: 10.0   # How fast cost drops off from obstacles
+
+# ========================================
+# SENSOR CONFIGURATION
+# ========================================
 laser_scan_sensor: 
- topic: limo/scan
- # Name of topic where sensor data is published.
- sensor_frame: laser_link
- # Name of sensor frame.
- data_type: LaserScan
- # Type of message published by sensor (LaserScan).
- marking: true
- # True if sensor can be used to mark area as occupied.
- clearing: true
- 
+  topic: /limo/scan
+  sensor_frame: laser_link
+  data_type: LaserScan
+  marking: true               # Can mark obstacles
+  clearing: true              # Can clear space
