@@ -4,11 +4,11 @@ TrajectoryPlannerROS:
   # --- 1. Velocity and Motion Limits ---
             # Minimum translational speed (m/s). Keeps robot moving.
   # ADJUSTMENT 1: Decreased max_vel_x slightly to reduce required stopping distance
-  max_vel_x: 0.4
+  max_vel_x: 0.2
   min_vel_x: 0.1
            # Maximum translational speed (m/s). Was 0.3.
   min_vel_theta: -1.0        # Minimum rotational speed (rad/s).
-  max_vel_theta: 1.0         # Maximum rotational speed (rad/s).
+  max_vel_theta: 0.3         # Maximum rotational speed (rad/s).
   min_in_place_vel_theta: 0.5 # Minimum speed for rotating in place. A decent value.
   escape_vel: -0.1           # Speed used when escaping from an obstacle (negative for backwards motion).
   holonomic_robot: false
