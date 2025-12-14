@@ -1,7 +1,7 @@
 
 robot_base_frame: base_link
-costmap_topic: costmap
-costmap_updates_topic: costmap_updates
+costmap_topic: map
+costmap_updates_topic: map_updates
 visualize: true
 planner_frequency: 0.4
 progress_timeout: 30.0

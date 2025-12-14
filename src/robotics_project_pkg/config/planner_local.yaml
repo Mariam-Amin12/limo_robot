@@ -2,20 +2,41 @@ base_local_planner: base_local_planner/TrajectoryPlannerROS
 
 TrajectoryPlannerROS:
   # --- 1. Velocity and Motion Limits ---
-  min_vel_x: 0.1             # Minimum translational speed (m/s). Keeps robot moving.
+            # Minimum translational speed (m/s). Keeps robot moving.
   # ADJUSTMENT 1: Decreased max_vel_x slightly to reduce required stopping distance
-  max_vel_x: 0.25            # Maximum translational speed (m/s). Was 0.3.
-  min_vel_theta: -0.7        # Minimum rotational speed (rad/s).
-  max_vel_theta: 0.7         # Maximum rotational speed (rad/s).
-  min_in_place_vel_theta: 0.4 # Minimum speed for rotating in place. A decent value.
+  max_vel_x: 0.4
+  min_vel_x: 0.1
+           # Maximum translational speed (m/s). Was 0.3.
+  min_vel_theta: -1.0        # Minimum rotational speed (rad/s).
+  max_vel_theta: 1.0         # Maximum rotational speed (rad/s).
+  min_in_place_vel_theta: 0.5 # Minimum speed for rotating in place. A decent value.
   escape_vel: -0.1           # Speed used when escaping from an obstacle (negative for backwards motion).
-
+  holonomic_robot: false
+  latch_xy_goal_tolerance: false
   # --- 2. Acceleration Limits ---
   acc_lim_theta: 1.0         # Maximum rotational acceleration (rad/s^2).
   acc_lim_x: 1.0             # Maximum translational acceleration (m/s^2).
 
-  # --- 3. Kinematic Type ---
-  holonomic_robot: false     # Set to false for a differential drive robot (correct).
+  sim_time: 1.0
+  sim_granularity: 0.02
+  angular_sim_granularity: 0.02
+  vx_samples: 10
+  vtheta_samples: 20
+  controller_frequency: 20.0
+
+  pdist_scale: 2.5  #     The weighting for how much the controller should stay close to the path it was given . default 0.6
+  gdist_scale: 1.0 # 
+
+  heading_lookahead: 0.325  #How far to look ahead in meters when scoring different in-place-rotation trajectories
+  heading_scoring: false  #Whether to score based on the robot's heading to the path or its distance from the path. default false
+  heading_scoring_timestep: 0.8   #How far to look ahead in time in seconds along the simulated trajectory when using heading scoring (double, default: 0.8)
+  simple_attractor: false
+  publish_cost_grid_pc: true 
+
+
+  oscillation_reset_dist: 0.25 #How far the robot must travel in meters before oscillation flags are reset (double, default: 0.05)
+  escape_reset_dist: 0.1
+  escape_reset_theta: 0.1
 
   # --- 4. Goal Reaching Tolerances ---
   xy_goal_tolerance: 0.1     # Distance threshold to consider the X,Y goal reached (0.1m).
@@ -25,14 +46,23 @@ TrajectoryPlannerROS:
   meter_scoring: true        # ESSENTIAL FIX: Makes scores robust against changes in costmap resolution.
   
   # ADJUSTMENT 2: Increased path_distance_bias to prioritize staying on the global path more strongly.
-  path_distance_bias: 30     # Weight for staying close to the global plan. Increased from 20 to 30.
+  path_distance_bias: 20     # Weight for staying close to the global plan. Increased from 20 to 30.
   
-  goal_distance_bias: 15     # Weight for moving towards the local goal/endpoint.
+  goal_distance_bias: 40     # Weight for moving towards the local goal/endpoint.
   
   # CRUCIAL FOR OSCILLATION: If rotational velocity drops below this, the robot is considered stopped.
   rot_stopped_vel: 0.001     # Ensures the spinning cycle is broken by recognizing it's stopped.
   
-  occdist_scale: 0.005        # Weight for obstacle clearance (costmap distance).
+  occdist_scale: 0.05        # Weight for obstacle clearance (costmap distance).
 
   # --- 6. Planning Window ---
-  sim_time: 2.0              # How far into the future (in seconds) the planner looks to simulate trajectories.
+  sim_time: 1.5              # How far into the future (in seconds) the planner looks to simulate trajectories.
+  recovery_behavior_enabled: true
+
+recovery_behaviors:
+  - name: 'conservative_reset'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  - name: 'rotate_recovery'
+    type: 'rotate_recovery/RotateRecovery'
+  - name: 'aggressive_reset'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'

@@ -6,14 +6,13 @@ slam_toolbox:
   ceres_dogleg_type: TRADITIONAL_DOGLEG
   ceres_loss_function: None
 
-  # Frames - these will be overridden in launch file for multi-robot
+  # Frames
   odom_frame: odom
   map_frame: map
   base_frame: base_link        
 
   # Topics / mode
-  # Set scan topic to use namespace-relative path
-  scan_topic: scan
+  scan_topic: /limo/scan      
   mode: mapping
 
   # Timing / transforms
@@ -21,11 +20,10 @@ slam_toolbox:
   throttle_scans: 1
   transform_publish_period: 0.02
   map_update_interval: 5.0
-  publish_pose_graph: true
   resolution: 0.05
   max_laser_range: 8.0
   minimum_time_interval: 0.5
-  transform_timeout: 1.0
+  transform_timeout: 1.0     # increased from 0.2 to avoid brief lookup failures
   tf_buffer_duration: 30.0
 
   stack_size_to_use: 40000000
