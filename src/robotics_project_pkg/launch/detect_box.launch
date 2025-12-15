@@ -1,5 +1,4 @@
 <launch>
-
   <!-- Set GAZEBO_MODEL_PATH to include the models directory -->
   <env name="GAZEBO_MODEL_PATH" value="$(find robotics_project_pkg)/models:$(optenv GAZEBO_MODEL_PATH)"/>
       
@@ -29,9 +28,9 @@
     -unpause
     -urdf
     -param robot_description
-    -model 'limo$(arg robot_namespace)'" />
+    -model 'limo$(arg robot_namespace)'" /> 
 
-  <rosparam file="$(find limo_gazebo_sim)/config/limo_four_diff_control.yaml" command="load"/>
+  <rosparam file="$(find limo_gazebo_sim)/config/limo_four_diff_control.yaml" command="load"/> 
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
     respawn="false" output="screen"
     args="limo_state_controller diff_drive_controller"/>
@@ -51,8 +50,13 @@
     
     <rosparam file="$(find robotics_project_pkg)/config/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find robotics_project_pkg)/config/global_costmap_params.yaml" command="load" />
-    <rosparam file="$(find robotics_project_pkg)/config/planner_global.yaml" command="load" />
-    <rosparam file="$(find robotics_project_pkg)/config/planner_local.yaml" command="load" />
+    <!-- <rosparam file="$(find robotics_project_pkg)/config/planner_global.yaml" command="load" />
+    <rosparam file="$(find robotics_project_pkg)/config/planner_local.yaml" command="load" /> -->
+    <rosparam file="$(find robotics_project_pkg)/config/planner.yaml" command="load" /> 
+    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
+    <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+
+
   </node>
 
   <node pkg="explore_lite" type="explore" respawn="true" name="explore_lite" output="screen">

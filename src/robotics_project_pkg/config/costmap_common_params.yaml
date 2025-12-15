@@ -1,51 +1,32 @@
-# ============================================
-# COSTMAP CONFIGURATION (CLEANED)
-# ============================================
 
-# 1. Robot Geometry
+#---standard pioneer footprint---
+#---(in meters)---
+
 footprint: [[-0.16, -0.11], [-0.16, 0.11], [0.16, 0.11], [0.16, -0.11]]
 footprint_padding: 0.02
 
-# 2. Frame Settings
-global_frame: map
-robot_base_frame: base_link
-rolling_window: true
 transform_tolerance: 0.2
+map_type: costmap
 
-# 3. General Settings
 always_send_full_costmap: true
-observation_sources: laser_scan_sensor
 
-# ========================================
-# LAYER CONFIGURATIONS
-# ========================================
-
-# STATIC LAYER
-static_layer:
-  enabled: true
-  map_topic: "/map"
-
-# OBSTACLE LAYER
 obstacle_layer:
-  enabled: true
-  obstacle_range: 3.0         # How far to detect obstacles
-  raytrace_range: 4.0         # How far to clear space
-  track_unknown_space: true
-  combination_method: 1
-  # REMOVED inflation_radius from here (belongs in inflation_layer only)
+ enabled: true
+ obstacle_range: 3.0
+ raytrace_range: 4.0
+ inflation_radius: 0.2
+ track_unknown_space: true
+ combination_method: 1
 
-# INFLATION LAYER - FIXED!
+ observation_sources: laser_scan_sensor
+ laser_scan_sensor: {data_type: LaserScan, topic: scan, marking: true, clearing: true}
+
+
 inflation_layer:
-  enabled: true
-  inflation_radius: 0.4       # FIXED: Single consistent value (was 0.5 and 0.2)
-  cost_scaling_factor: 10.0   # How fast cost drops off from obstacles
+  enabled:              true
+  cost_scaling_factor:  10.0  # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:     0.5  # max. distance from an obstacle at which costs are incurred for planning paths.
 
-# ========================================
-# SENSOR CONFIGURATION
-# ========================================
-laser_scan_sensor: 
-  topic: /limo/scan
-  sensor_frame: laser_link
-  data_type: LaserScan
-  marking: true               # Can mark obstacles
-  clearing: true              # Can clear space
+static_layer:
+  enabled:              true
+  map_topic:            "/map"
