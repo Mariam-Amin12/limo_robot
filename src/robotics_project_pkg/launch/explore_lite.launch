@@ -36,7 +36,7 @@
 
   <arg name="slam_mode" default="mapping"/>
   <node pkg="slam_toolbox" type="sync_slam_toolbox_node" name="slam_toolbox" output="screen">
-    <remap from="/scan" to="/limo/scan"/> 
+ 
     <rosparam file="$(find robotics_project_pkg)/config/slam_toolbox_params.yaml" command="load" />
   </node>
   <param name="use_sim_time" value="true"/>

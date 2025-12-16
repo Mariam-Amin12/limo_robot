@@ -33,31 +33,6 @@
       <remap from="joint_states" to="joint_states"/>
     </node>
 
-    <!-- SLAM Toolbox -->
-    <node pkg="slam_toolbox" type="sync_slam_toolbox_node" name="slam_toolbox" output="screen">
-      <!-- Topic remapping -->
-      <remap from="scan" to="scan"/>
-      <remap from="map" to="map"/>
-      <remap from="map_metadata" to="map_metadata"/>
-      
-      <!-- Load parameters -->
-      <rosparam file="$(find robotics_project_pkg)/config/slam_toolbox_params.yaml" command="load" />
-      
-      <!-- Frame names - SLASH notation for TF frames -->
-      <param name="odom_frame" value="$(arg robot_name)/odom"/>
-      <param name="base_frame" value="$(arg robot_name)/base_footprint"/>
-      <param name="map_frame" value="$(arg robot_name)/map"/>
-      
-      <!-- SLAM configuration -->
-      <param name="mode" value="mapping"/>
-      <param name="transform_publish_period" value="0.02"/>
-      <param name="map_update_interval" value="1.0"/>
-      <param name="resolution" value="0.05"/>
-      <param name="max_laser_range" value="20.0"/>
-      <param name="minimum_travel_distance" value="0.2"/>
-      <param name="minimum_travel_heading" value="0.2"/>
-    </node>
-    
     <!-- Move Base -->
     <node pkg="move_base" type="move_base" name="move_base" output="screen">
       <!-- Load all parameter files -->
@@ -72,11 +47,38 @@
       <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
       <param name="base_global_planner" value="global_planner/GlobalPlanner" />
       
+      <!-- Global planner configuration - allow planning through unknown space -->
+      <param name="GlobalPlanner/allow_unknown" value="true"/>
+      <param name="GlobalPlanner/use_dijkstra" value="true"/>
+      <param name="GlobalPlanner/use_quadratic" value="true"/>
+      <!-- Very large tolerance for tight corridors -->
+      <param name="GlobalPlanner/default_tolerance" value="1.0"/>
+      <!-- Reduced cost factor to allow paths closer to obstacles -->
+      <param name="GlobalPlanner/cost_factor" value="2.0"/>
+      
+      <!-- Transform tolerance for TF lookups -->
+      <param name="transform_tolerance" value="0.5"/>
+      
       <!-- Frame configuration - SLASH notation for TF frames -->
       <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint"/>
       <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint"/>
       <param name="global_costmap/global_frame" value="$(arg robot_name)/map"/>
       <param name="local_costmap/global_frame" value="$(arg robot_name)/odom"/>
+      
+      <!-- Map topic for static layer (relative to namespace) -->
+      <param name="global_costmap/static_layer/map_topic" value="map"/>
+      
+      <!-- Observation sources configuration - ensure scan is properly remapped -->
+      <param name="global_costmap/obstacle_layer/laser_scan_sensor/topic" value="scan"/>
+      <param name="local_costmap/obstacle_layer/laser_scan_sensor/topic" value="scan"/>
+      
+      <!-- Increased inflation for multi-robot collision avoidance -->
+      <param name="global_costmap/inflation_layer/inflation_radius" value="0.3"/>
+      <param name="local_costmap/inflation_layer/inflation_radius" value="0.2"/>
+      <param name="global_costmap/inflation_layer/cost_scaling_factor" value="3.0"/>
+      
+      <!-- Enable verbose output for debugging -->
+      <param name="clearing_rotation_allowed" value="true"/>
       
       <!-- Topic remapping for cmd_vel -->
       <remap from="cmd_vel" to="cmd_vel"/>
@@ -98,7 +100,40 @@
       <remap from="costmap" to="move_base/global_costmap/costmap"/>
       <remap from="costmap_updates" to="move_base/global_costmap/costmap_updates"/>
       <remap from="move_base" to="move_base"/>
+      
+      <!-- Enable visualization for debugging -->
+      <param name="visualize" value="true"/>
     </node>
 
   </group>
+
+  <!-- SLAM Toolbox - run outside the per-robot namespace.
+       Each include of this launch file will start its own node with a unique name
+       and explicitly remap topics to that robot's scan/map. -->
+  <node pkg="slam_toolbox" type="sync_slam_toolbox_node"
+        name="$(arg robot_name)_slam_toolbox" output="screen">
+    <!-- Map slam_toolbox's absolute topics to the robot-specific ones -->
+    <remap from="/scan"         to="/$(arg robot_name)/scan"/>
+    <remap from="/map"          to="/$(arg robot_name)/map"/>
+    <remap from="/map_metadata" to="/$(arg robot_name)/map_metadata"/>
+    
+    <!-- Load parameters -->
+    <rosparam file="$(find robotics_project_pkg)/config/slam_toolbox_params.yaml" command="load" />
+    
+    <!-- Frame names - absolute TF frame IDs -->
+    <param name="odom_frame" value="$(arg robot_name)/odom"/>
+    <param name="base_frame" value="$(arg robot_name)/base_footprint"/>
+    <param name="map_frame" value="$(arg robot_name)/map"/>
+    <param name="scan_topic" value="/$(arg robot_name)/scan"/>
+    
+    <!-- SLAM configuration overrides -->
+    <param name="mode" value="mapping"/>
+    <param name="transform_publish_period" value="0.02"/>
+    <param name="map_update_interval" value="1.0"/>
+    <param name="resolution" value="0.05"/>
+    <param name="max_laser_range" value="8.0"/>
+    <param name="minimum_travel_distance" value="0.2"/>
+    <param name="minimum_travel_heading" value="0.2"/>
+  </node>
+
 </launch>

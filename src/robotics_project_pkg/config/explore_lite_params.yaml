@@ -1,12 +1,21 @@
 
-robot_base_frame: base_link
-costmap_topic: map
-costmap_updates_topic: map_updates
+robot_base_frame: base_footprint
+# Use the global costmap produced by move_base
+costmap_topic: move_base/global_costmap/costmap
+costmap_updates_topic: move_base/global_costmap/costmap_updates
 visualize: true
-planner_frequency: 0.4
-progress_timeout: 90.0
-potential_scale: 3.0
+# Increased frequency for more persistent exploration
+planner_frequency: 0.6
+# Longer timeout to allow thorough exploration
+progress_timeout: 60.0
+# Adjusted scales to prefer unexplored areas
+potential_scale: 4.0  # Increased to prefer unexplored frontiers
 orientation_scale: 0.0
-gain_scale: 1.0
+gain_scale: 1.5  # Increased to prefer new areas
 transform_tolerance: 0.3
-min_frontier_size: 0.7
+# Very small frontier size to explore thoroughly
+min_frontier_size: 0.15  # Even smaller to find more frontiers
+# Continue exploring even when most of map is covered
+max_frontier_size: 10.0
+# Prevent revisiting same areas
+explore_boundary: false

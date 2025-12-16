@@ -60,6 +60,7 @@
               <plugin name="gazebo_ros_laser_sensor" filename="libgazebo_ros_laser.so">
                 <!-- FIXED: Topic will be published under namespace (scan -> robot1/scan) -->
                 <topicName>scan</topicName>
+                <robotNamespace>/${ns}</robotNamespace>
                 <!-- FIXED: Add namespace prefix to frame name -->
                 <frameName>${ns}/${frame_prefix}_link</frameName>
               </plugin>
@@ -88,6 +89,7 @@
             </camera>
 
             <plugin name="gazebo_ros_depth_camera_sensor" filename="libgazebo_ros_openni_kinect.so">
+              <robotNamespace>/${ns}</robotNamespace>
               <baseline>0.2</baseline>
               <alwaysOn>true</alwaysOn>
               <!-- Keep this zero, update_rate in the parent <sensor> tag
@@ -129,6 +131,7 @@
           <visualize>true</visualize>
           <topic>__default_topic__</topic>
           <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+            <robotNamespace>/${ns}</robotNamespace>
             <topicName>imu</topicName>
             <!-- FIXED: Add namespace prefix to frame name -->
             <bodyName>${ns}/${frame_prefix}_link</bodyName>

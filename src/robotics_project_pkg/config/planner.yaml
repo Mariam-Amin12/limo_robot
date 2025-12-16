@@ -1,6 +1,22 @@
 controller_frequency: 5.0
 recovery_behaviour_enabled: true
 
+# GlobalPlanner configuration (used in launch file)
+GlobalPlanner:
+  old_navfn_behavior: false
+  use_quadratic: true
+  use_dijkstra: true
+  use_grid_path: false
+  allow_unknown: true  # CRITICAL: Allow planning through unknown space during exploration
+  planner_window_x: 0.0
+  planner_window_y: 0.0
+  default_tolerance: 1.0  # Very large tolerance for tight spaces
+  publish_scale: 100
+  lethal_cost: 253
+  neutral_cost: 50
+  cost_factor: 2.0  # Reduced cost factor to allow paths closer to obstacles
+  publish_potential: true
+
 NavfnROS:
   allow_unknown: true # Specifies whether or not to allow navfn to create plans that traverse unknown space.
   default_tolerance: 0.1 # A tolerance on the goal point for the planner.
@@ -10,8 +26,10 @@ TrajectoryPlannerROS:
   acc_lim_x: 2.5
   acc_lim_theta:  3.2
 
-  max_vel_x: 0.5
-  min_vel_x: 0.1
+  # Balanced speed for safe and efficient navigation
+  max_vel_x: 0.3
+  # Minimum velocity for smooth control
+  min_vel_x: 0.05
 
   max_vel_theta: 1.0
   min_vel_theta: -1.0
@@ -20,24 +38,24 @@ TrajectoryPlannerROS:
   holonomic_robot: false
   escape_vel: -0.1
 
-  # Goal Tolerance Parameters
-  yaw_goal_tolerance: 0.15
-  xy_goal_tolerance: 0.2
-  latch_xy_goal_tolerance: false
+  # Goal Tolerance Parameters - balanced for multi-robot navigation
+  yaw_goal_tolerance: 0.3
+  xy_goal_tolerance: 0.3
+  latch_xy_goal_tolerance: true
 
-  # Forward Simulation Parameters
-  sim_time: 1.0
-  sim_granularity: 0.02
-  angular_sim_granularity: 0.02
-  vx_samples: 6
-  vtheta_samples: 20
+  # Forward Simulation Parameters - maximum samples for tight spaces
+  sim_time: 2.0  # Longer lookahead for tight spaces
+  sim_granularity: 0.01  # Finer granularity for precise planning
+  angular_sim_granularity: 0.01  # Finer angular granularity
+  vx_samples: 12  # Many more velocity samples for better path selection
+  vtheta_samples: 40  # Many more angular samples for tight turns
   controller_frequency: 20.0
 
-  # Trajectory scoring parameters
-  meter_scoring: true # Whether the gdist_scale and pdist_scale parameters should assume that goal_distance and path_distance are expressed in units of meters or cells. Cells are assumed by default (false).
-  occdist_scale:  0.1 #The weighting for how much the controller should attempt to avoid obstacles. default 0.01
-  pdist_scale: 2.5  #     The weighting for how much the controller should stay close to the path it was given . default 0.6
-  gdist_scale: 1.0 #     The weighting for how much the controller should attempt to reach its local goal, also controls speed  default 0.8
+  # Trajectory scoring parameters - balanced for safe multi-robot navigation
+  meter_scoring: true
+  occdist_scale:  0.1 # Increased obstacle avoidance for multi-robot safety
+  pdist_scale: 3.0  # Path following weight
+  gdist_scale: 2.0 # Goal distance weight
 
   heading_lookahead: 0.325  #How far to look ahead in meters when scoring different in-place-rotation trajectories
   heading_scoring: false  #Whether to score based on the robot's heading to the path or its distance from the path. default false
@@ -46,10 +64,10 @@ TrajectoryPlannerROS:
   simple_attractor: false
   publish_cost_grid_pc: true  
 
-  # Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.25 #How far the robot must travel in meters before oscillation flags are reset (double, default: 0.05)
-  escape_reset_dist: 0.1
-  escape_reset_theta: 0.1
+  # Oscillation Prevention Parameters - relaxed to prevent false detection
+  oscillation_reset_dist: 0.5 # Increased distance before oscillation flags reset
+  escape_reset_dist: 0.2  # Increased escape reset distance
+  escape_reset_theta: 0.2  # Increased escape reset angle
 
 DWAPlannerROS:
   # Robot configuration parameters  
