@@ -5,9 +5,10 @@
     <!-- Expose namespace as property for included files -->
     <xacro:property name="ns" value="$(arg robot_namespace)"/>
 
-    <!-- 2. Include other Xacro files -->
+    <!-- Include other Xacro files -->
     <xacro:include filename="$(find robotics_project_pkg)/urdf/limo_xacro.xacro" /> 
     <xacro:include filename="$(find robotics_project_pkg)/urdf/limo_four_diff.gazebo" />
+    
     <!-- Variables -->
     <xacro:property name="M_PI" value="3.14159"/>
 
@@ -24,17 +25,23 @@
     <xacro:property name="wheel_length" value="0.045" />
     <xacro:property name="wheel_radius" value="0.045" />
 
-    <!-- Base footprint -->
-    <link name="${ns}_base_footprint"/>
+    <!-- 
+    CRITICAL: Link names are now GENERIC (no namespace prefix)
+    The tf_prefix parameter in robot_state_publisher will add the namespace
+    Example: base_footprint becomes robot1/base_footprint in TF
+    -->
 
-    <joint name="${ns}_base_joint" type="fixed">
-        <parent link="${ns}_base_footprint"/>
-        <child link="${ns}_base_link"/>
+    <!-- Base footprint -->
+    <link name="base_footprint"/>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
         <origin xyz="0.0 0.0 0.15" rpy="0 0 0"/>
     </joint>
 
     <!-- Base link -->
-    <link name="${ns}_base_link">
+    <link name="base_link">
         <visual>
             <origin xyz="0 0 -0.15" rpy="0 0 1.57" />
             <geometry>
@@ -49,8 +56,8 @@
         </collision>
     </link>
 
-    <!-- Inertial -->
-    <link name="${ns}_inertial_link">
+    <!-- Inertial link -->
+    <link name="inertial_link">
         <inertial>
             <origin xyz="0.0 0.0 0.0" />
             <mass value="${base_mass}" />
@@ -60,41 +67,41 @@
         </inertial>
     </link>
 
-    <joint name="${ns}_inertial_joint" type="fixed">
+    <joint name="inertial_joint" type="fixed">
         <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="${ns}_base_link" />
-        <child link="${ns}_inertial_link" />
+        <parent link="base_link" />
+        <child link="inertial_link" />
     </joint>
 
-    <!-- Laser -->
-    <xacro:limo_laser parent_prefix="${ns}_base_link" frame_prefix="${ns}_laser">
+    <!-- Laser sensor - generic names -->
+    <xacro:limo_laser parent_prefix="base_link" frame_prefix="laser">
         <origin xyz="0.103 0 -0.034" rpy="0 0 0"/>
     </xacro:limo_laser>
 
-    <!-- Depth camera -->
-    <xacro:limo_depth_camera parent_prefix="${ns}_base_link" frame_prefix="${ns}_depth_camera">
+    <!-- Depth camera - generic names -->
+    <xacro:limo_depth_camera parent_prefix="base_link" frame_prefix="depth_camera">
         <origin xyz="0.084 0 0.03" rpy="0 0 0"/>
     </xacro:limo_depth_camera>
 
-    <!-- IMU -->
-    <xacro:limo_imu parent_prefix="${ns}_base_link" frame_prefix="${ns}_imu">
+    <!-- IMU sensor - generic names -->
+    <xacro:limo_imu parent_prefix="base_link" frame_prefix="imu">
         <origin xyz="0.0 0 -0.1" rpy="0 0 0"/>
     </xacro:limo_imu>
 
-    <!-- Wheels -->
-    <xacro:limo_wheel parent_prefix="${ns}_base_link" wheel_prefix="${ns}_front_left" reflect="1">
+    <!-- Wheels - generic names -->
+    <xacro:limo_wheel parent_prefix="base_link" wheel_prefix="front_left" reflect="1">
         <origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
     </xacro:limo_wheel>
 
-    <xacro:limo_wheel parent_prefix="${ns}_base_link" wheel_prefix="${ns}_front_right" reflect="-1">
+    <xacro:limo_wheel parent_prefix="base_link" wheel_prefix="front_right" reflect="-1">
         <origin xyz="${wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="${M_PI} 0 0" />
     </xacro:limo_wheel>
 
-    <xacro:limo_wheel parent_prefix="${ns}_base_link" wheel_prefix="${ns}_rear_left" reflect="1">
+    <xacro:limo_wheel parent_prefix="base_link" wheel_prefix="rear_left" reflect="1">
         <origin xyz="${-wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
     </xacro:limo_wheel>
 
-    <xacro:limo_wheel parent_prefix="${ns}_base_link" wheel_prefix="${ns}_rear_right" reflect="-1">
+    <xacro:limo_wheel parent_prefix="base_link" wheel_prefix="rear_right" reflect="-1">
         <origin xyz="${-wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="${M_PI} 0 0" />
     </xacro:limo_wheel>
 

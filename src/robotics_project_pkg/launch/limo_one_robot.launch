@@ -6,85 +6,99 @@
   <arg name="init_pose_yaw" default="0.0"/>
 
   <group ns="$(arg robot_name)">
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find limo_description)/urdf/limo_four_diff.xacro' robot_namespace:=$(arg robot_name)" />
+    <!-- Load robot description with namespace -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find robotics_project_pkg)/urdf/limo_four_diff.xacro' robot_namespace:=$(arg robot_name)" />
 
+    <!-- Spawn robot in Gazebo -->
     <node name="spawn_limo_model" pkg="gazebo_ros" type="spawn_model" 
-          args="-x $(arg init_pose_x) -y $(arg init_pose_y) -z $(arg init_pose_z) -Y $(arg init_pose_yaw) -unpause -urdf -param robot_description -model $(arg robot_name)" />
+          args="-x $(arg init_pose_x) -y $(arg init_pose_y) -z $(arg init_pose_z) -Y $(arg init_pose_yaw) -unpause -urdf -param robot_description -model $(arg robot_name)" 
+          output="screen"
+          respawn="false"/>
 
+    <!-- Load controller configuration -->
     <rosparam file="$(find limo_gazebo_sim)/config/limo_four_diff_control.yaml" command="load"/>
 
-    <!-- Joint State Publisher - publishes joint states from simulation -->
+    <!-- Joint State Publisher -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
       <param name="use_gui" value="false"/>
+      <remap from="joint_states" to="joint_states"/>
     </node>
-    
-    <!-- Robot State Publisher - publishes TF for robot links -->
-    <!-- CRITICAL FIX: Set publish_frequency to 0 to prevent odom→base_footprint publishing -->
-    <!-- Gazebo already publishes this transform, so we only need link transforms -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
-      <param name="publish_frequency" value="30.0"/>
-      <!-- This will publish transforms for all links EXCEPT odom→base_footprint -->
-      <!-- because Gazebo's p3d plugin already publishes that -->
-    </node>
+    <param name="use_sim_time" value="true"/>
 
-    <!-- Store initial pose for map_merge -->
-    <param name="map_merge/init_pose_x" value="$(arg init_pose_x)"/>
-    <param name="map_merge/init_pose_y" value="$(arg init_pose_y)"/>
-    <param name="map_merge/init_pose_z" value="$(arg init_pose_z)"/>
-    <param name="map_merge/init_pose_yaw" value="$(arg init_pose_yaw)"/>
+    <!-- Robot State Publisher with TF prefix 
+         Publishes all static transforms from URDF with namespace prefix -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <param name="publish_frequency" value="50.0"/>
+      <param name="tf_prefix" value="$(arg robot_name)"/>
+      <remap from="joint_states" to="joint_states"/>
+    </node>
 
     <!-- SLAM Toolbox -->
     <node pkg="slam_toolbox" type="sync_slam_toolbox_node" name="slam_toolbox" output="screen">
-      <remap from="/scan" to="scan"/>
-      <remap from="/map" to="map"/>
-      <remap from="/map_metadata" to="map_metadata"/>
+      <!-- Topic remapping -->
+      <remap from="scan" to="scan"/>
+      <remap from="map" to="map"/>
+      <remap from="map_metadata" to="map_metadata"/>
+      
+      <!-- Load parameters -->
       <rosparam file="$(find robotics_project_pkg)/config/slam_toolbox_params.yaml" command="load" />
       
-      <!-- Frame names (must match URDF) -->
-      <param name="odom_frame" value="$(arg robot_name)_odom"/>
-      <param name="base_frame" value="$(arg robot_name)_base_footprint"/>
-      <param name="map_frame" value="$(arg robot_name)_map"/>
+      <!-- Frame names - SLASH notation for TF frames -->
+      <param name="odom_frame" value="$(arg robot_name)/odom"/>
+      <param name="base_frame" value="$(arg robot_name)/base_footprint"/>
+      <param name="map_frame" value="$(arg robot_name)/map"/>
       
       <!-- SLAM configuration -->
       <param name="mode" value="mapping"/>
       <param name="transform_publish_period" value="0.02"/>
       <param name="map_update_interval" value="1.0"/>
+      <param name="resolution" value="0.05"/>
+      <param name="max_laser_range" value="20.0"/>
+      <param name="minimum_travel_distance" value="0.2"/>
+      <param name="minimum_travel_heading" value="0.2"/>
     </node>
     
     <!-- Move Base -->
     <node pkg="move_base" type="move_base" name="move_base" output="screen">
+      <!-- Load all parameter files -->
       <rosparam file="$(find robotics_project_pkg)/config/move_base.yaml" command="load" />
       <rosparam file="$(find robotics_project_pkg)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
       <rosparam file="$(find robotics_project_pkg)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
       <rosparam file="$(find robotics_project_pkg)/config/local_costmap_params.yaml" command="load" />
       <rosparam file="$(find robotics_project_pkg)/config/global_costmap_params.yaml" command="load" />
-      <rosparam file="$(find robotics_project_pkg)/config/planner_global.yaml" command="load" />
-      <rosparam file="$(find robotics_project_pkg)/config/planner_local.yaml" command="load" />
+      <rosparam file="$(find robotics_project_pkg)/config/planner.yaml" command="load" /> 
       
-      <!-- Frame configuration -->
-      <param name="global_costmap/robot_base_frame" value="$(arg robot_name)_base_footprint"/>
-      <param name="local_costmap/robot_base_frame" value="$(arg robot_name)_base_footprint"/>
-      <param name="global_costmap/global_frame" value="$(arg robot_name)_map"/>
-      <param name="local_costmap/global_frame" value="$(arg robot_name)_odom"/>
+      <!-- Planner selection -->
+      <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
+      <param name="base_global_planner" value="global_planner/GlobalPlanner" />
       
-      <!-- Sensor frames -->
-      <param name="global_costmap/obstacle_layer/laser_scan_sensor/sensor_frame" value="$(arg robot_name)_laser_link"/>
-      <param name="local_costmap/obstacle_layer/laser_scan_sensor/sensor_frame" value="$(arg robot_name)_laser_link"/>
+      <!-- Frame configuration - SLASH notation for TF frames -->
+      <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint"/>
+      <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint"/>
+      <param name="global_costmap/global_frame" value="$(arg robot_name)/map"/>
+      <param name="local_costmap/global_frame" value="$(arg robot_name)/odom"/>
+      
+      <!-- Topic remapping for cmd_vel -->
+      <remap from="cmd_vel" to="cmd_vel"/>
+      <remap from="odom" to="odom"/>
+      
+      <!-- Observation sources remapping -->
+      <remap from="scan" to="scan"/>
     </node>
 
-    <!-- Explore Lite -->
-    <node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
-      <param name="robot_base_frame" value="$(arg robot_name)_base_footprint"/>
-      <param name="costmap_topic" value="move_base/global_costmap/costmap"/>
-      <param name="costmap_updates_topic" value="move_base/global_costmap/costmap_updates"/>
-      <param name="visualize" value="true"/>
-      <param name="planner_frequency" value="1.0"/>
-      <param name="progress_timeout" value="60.0"/>
-      <param name="potential_scale" value="1.0"/>
-      <param name="orientation_scale" value="0.0"/>
-      <param name="gain_scale" value="1.0"/>
-      <param name="transform_tolerance" value="0.5"/>
-      <param name="min_frontier_size" value="0.5"/>
+    <!-- Explore Lite for autonomous exploration -->
+    <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="screen">
+      <rosparam file="$(find robotics_project_pkg)/config/explore_lite_params.yaml" command="load" />
+      
+      <!-- Frame configuration - SLASH notation for TF frames -->
+      <param name="robot_base_frame" value="$(arg robot_name)/base_footprint"/>
+      
+      <!-- Topic remapping (use relative paths within namespace) -->
+      <remap from="map" to="map"/>
+      <remap from="costmap" to="move_base/global_costmap/costmap"/>
+      <remap from="costmap_updates" to="move_base/global_costmap/costmap_updates"/>
+      <remap from="move_base" to="move_base"/>
     </node>
+
   </group>
 </launch>

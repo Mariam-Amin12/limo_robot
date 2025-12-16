@@ -1,71 +1,96 @@
 <launch>
+  <!-- GUI argument for Gazebo -->
   <arg name="gui" default="true"/>
+  
+  <!-- Use simulation time -->
   <param name="use_sim_time" value="true"/>
+  
+  <!-- Set Gazebo model path -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find robotics_project_pkg)/models:$(optenv GAZEBO_MODEL_PATH)"/>
 
-  <!-- Start Gazebo -->
+  <!-- Start Gazebo with empty world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find robotics_project_pkg)/worlds/world_2.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+    <arg name="verbose" value="true"/>
   </include>
 
-  <!-- Robot 1 -->
-  <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
-    <arg name="robot_name" value="robot1"/>
-    <arg name="init_pose_x" value="0.5"/>
-    <arg name="init_pose_y" value="0.5"/>
-    <arg name="init_pose_yaw" value="0.0"/>
-  </include>
+  <!-- Wait for Gazebo to be ready -->
+  <arg name="spawn_delay" default="2.0"/>
 
-  <!-- Robot 2 -->
-  <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
-    <arg name="robot_name" value="robot2"/>
-    <arg name="init_pose_x" value="14.0"/>
-    <arg name="init_pose_y" value="0.5"/>
-    <arg name="init_pose_yaw" value="0.0"/>
-  </include>
-
-  <!-- Robot 3 -->
-  <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
-    <arg name="robot_name" value="robot3"/>
-    <arg name="init_pose_x" value="0.5"/>
-    <arg name="init_pose_y" value="12.0"/>
-    <arg name="init_pose_yaw" value="0.0"/>
-  </include>
-
-  <!-- Map Merge Node - CORRECTED CONFIGURATION -->
-  <node pkg="multirobot_map_merge" type="map_merge" name="map_merge" output="screen">
-    <param name="robot_map_topic" value="map"/>
-    <param name="robot_namespace" value=""/>
-    <param name="merged_map_topic" value="merged_map"/>
-    <param name="world_frame" value="map"/>
+  <!-- Robot 1 - Bottom left corner -->
+  <group>
+    <!-- Small delay to ensure Gazebo is ready -->
+    <node name="spawn_delay_robot1" pkg="rosservice" type="rosservice"
+          args="call --wait /gazebo/unpause_physics" output="screen"/>
     
-    <!-- CRITICAL: Set to true since we're providing initial poses -->
-    <param name="known_init_poses" value="true"/>
+    <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
+      <arg name="robot_name" value="robot1"/>
+      <arg name="init_pose_x" value="0.5"/>
+      <arg name="init_pose_y" value="0.5"/>
+      <arg name="init_pose_z" value="0.0"/>
+      <arg name="init_pose_yaw" value="0.0"/>
+    </include>
+  </group>
+
+  <!-- Robot 2 - Bottom right area (spawn after delay) -->
+  <group>
+    <node name="delay_spawn_robot2" pkg="rosservice" type="rosservice"
+          args="call --wait /gazebo/get_model_state robot1 ''"/>
     
-    <param name="merging_rate" value="1.0"/>
-    <param name="discovery_rate" value="1.0"/>
+    <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
+      <arg name="robot_name" value="robot2"/>
+      <arg name="init_pose_x" value="14.0"/>
+      <arg name="init_pose_y" value="0.5"/>
+      <arg name="init_pose_z" value="0.0"/>
+      <arg name="init_pose_yaw" value="0.0"/>
+    </include>
+  </group>
+
+  <!-- Robot 3 - Top left area (spawn after delay) -->
+  <group>
+    <node name="delay_spawn_robot3" pkg="rosservice" type="rosservice"
+          args="call --wait /gazebo/get_model_state robot2 ''"/>
+    
+    <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
+      <arg name="robot_name" value="robot3"/>
+      <arg name="init_pose_x" value="0.5"/>
+      <arg name="init_pose_y" value="12.0"/>
+      <arg name="init_pose_z" value="0.0"/>
+      <arg name="init_pose_yaw" value="0.0"/>
+    </include>
+  </group>
+
+  <!-- Optional: Map merge for combining maps from multiple robots -->
+  <!-- Uncomment if you have multirobot_map_merge package -->
+  
+  <node pkg="tf" type="static_transform_publisher" name="world_to_robot1_map"
+        args="0 0 0 0 0 0 world robot1/map 100" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_robot2_map"
+        args="0 0 0 0 0 0 world robot2/map 100" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_robot3_map"
+        args="0 0 0 0 0 0 world robot3/map 100" />
+
+  <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
+      <param name="robot_map_topic" value="map"/>
+      <param name="robot_namespace" value="robot"/>
+      <param name="merged_map_topic" value="map_merged"/>
+      <param name="world_frame" value="world"/>
+      <param name="known_init_poses" value="true"/>
+      <param name="merging_rate" value="4.0"/>
+      <param name="discovery_rate" value="0.05"/>
+      <param name="estimation_rate" value="0.5"/>
+      <param name="estimation_confidence" value="1.0"/>
   </node>
 
-  <!-- CRITICAL FIX: Use map→robot_map instead of connecting robot_map to world separately -->
-  <!-- This creates the proper hierarchy: map → robot1_map → robot1_odom → robot1_base_footprint -->
-  
-  <!-- IMPORTANT: These transforms tell map_merge where each robot started -->
-  <!-- Format: x y z yaw pitch roll parent child period_ms -->
-  
-  <!-- Robot 1: Started at (0.5, 0.5) with yaw=0.0 -->
-  <node pkg="tf" type="static_transform_publisher" name="map_to_robot1_map" 
-        args="0 0 0 0 0 0 map robot1_map 100" />
-  
-  <!-- Robot 2: Started at (14.0, 0.5) with yaw=1.57 -->
-  <node pkg="tf" type="static_transform_publisher" name="map_to_robot2_map" 
-        args="0 0 0 0 0 0 map robot2_map 100" />
-  
-  <!-- Robot 3: Started at (0.5, 12.0) with yaw=-1.57 -->
-  <node pkg="tf" type="static_transform_publisher" name="map_to_robot3_map" 
-        args="0 0 0 0 0 0 map robot3_map 100" />
-  <!-- RViz -->
-  <node name="rviz" pkg="rviz" type="rviz"
-        args="-d $(find robotics_project_pkg)/rviz/multi_config.rviz"/>
+
+  <!-- Launch RViz with multi-robot configuration -->
+  <node name="rviz" pkg="rviz" type="rviz" required="false"
+        args="-d $(find robotics_project_pkg)/rviz/multi_config.rviz"
+        launch-prefix="bash -c 'sleep 5; $0 $@' "/>
+
 </launch>

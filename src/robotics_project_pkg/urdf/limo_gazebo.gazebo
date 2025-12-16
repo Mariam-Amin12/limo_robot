@@ -2,6 +2,9 @@
 
 <robot name="limo_gazebo" xmlns:xacro="http://ros.org/wiki/xacro">
 
+    <!-- Get namespace property from parent file -->
+    <xacro:property name="ns" value="$(arg robot_namespace)"/>
+
     <xacro:macro name="limo_wheel_transmission" params="wheel_prefix">
         <transmission name="${wheel_prefix}_wheel_trans" type="SimpleTransmission">
             <type>transmission_interface/SimpleTransmission</type>
@@ -55,9 +58,10 @@
                 </noise>
               </ray>
               <plugin name="gazebo_ros_laser_sensor" filename="libgazebo_ros_laser.so">
-                <!-- CHANGED: Publish to "scan" instead of "limo/scan" -->
+                <!-- FIXED: Topic will be published under namespace (scan -> robot1/scan) -->
                 <topicName>scan</topicName>
-                <frameName>${frame_prefix}_link</frameName>
+                <!-- FIXED: Add namespace prefix to frame name -->
+                <frameName>${ns}/${frame_prefix}_link</frameName>
               </plugin>
             </sensor>
           </gazebo>
@@ -95,7 +99,8 @@
               <depthImageTopicName>depth/image_raw</depthImageTopicName>
               <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
               <pointCloudTopicName>depth/points</pointCloudTopicName>
-              <frameName>${frame_prefix}_depth_link</frameName>
+              <!-- FIXED: Add namespace prefix to frame name -->
+              <frameName>${ns}/${frame_prefix}_depth_link</frameName>
               <cameraname>${frame_prefix}_link</cameraname>
               
               <pointCloudCutoff>0.5</pointCloudCutoff>
@@ -125,12 +130,14 @@
           <topic>__default_topic__</topic>
           <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
             <topicName>imu</topicName>
-            <bodyName>${frame_prefix}_link</bodyName>
+            <!-- FIXED: Add namespace prefix to frame name -->
+            <bodyName>${ns}/${frame_prefix}_link</bodyName>
             <updateRateHZ>100.0</updateRateHZ>
             <gaussianNoise>0.001</gaussianNoise>
             <xyzOffset>0 0 0</xyzOffset>
             <rpyOffset>0 0 0</rpyOffset>
-            <frameName>${frame_prefix}_link</frameName>
+            <!-- FIXED: Add namespace prefix to frame name -->
+            <frameName>${ns}/${frame_prefix}_link</frameName>
           </plugin>
           <pose>0 0 0 0 0 0</pose>
         </sensor>

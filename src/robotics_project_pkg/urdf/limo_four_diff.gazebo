@@ -12,12 +12,14 @@
     <xacro:limo_wheel_transmission wheel_prefix="front_left" />
     <xacro:limo_wheel_transmission wheel_prefix="rear_left" />
     <xacro:limo_wheel_transmission wheel_prefix="rear_right" /> -->
-    <!-- Controller configurations -->
-    <xacro:gazebo_laser frame_prefix="${ns}_laser" />
-    <xacro:gazebo_depth_camera frame_prefix="${ns}_depth_camera" />
-    <xacro:gazebo_imu frame_prefix="${ns}_imu" />
     
-    <gazebo reference="${ns}_front_left_wheel_link">
+    <!-- Sensor configurations - GENERIC names (no namespace prefix) -->
+    <xacro:gazebo_laser frame_prefix="laser" />
+    <xacro:gazebo_depth_camera frame_prefix="depth_camera" />
+    <xacro:gazebo_imu frame_prefix="imu" />
+    
+    <!-- Wheel friction properties - GENERIC link names -->
+    <gazebo reference="front_left_wheel_link">
         <mu1>10</mu1>
         <mu2>10</mu2>
         <kp>10000000.0</kp>
@@ -26,7 +28,8 @@
         <fdir1>1 0 0</fdir1>
         <maxContacts value="64"/>
     </gazebo>
-    <gazebo reference="${ns}_front_right_wheel_link">
+    
+    <gazebo reference="front_right_wheel_link">
         <mu1>10</mu1>
         <mu2>10</mu2>
         <kp>10000000.0</kp>
@@ -35,7 +38,8 @@
         <fdir1>1 0 0</fdir1>
         <maxContacts value="64"/>
     </gazebo>
-    <gazebo reference="${ns}_rear_left_wheel_link">
+    
+    <gazebo reference="rear_left_wheel_link">
         <mu1>10</mu1>
         <mu2>10</mu2>
         <kp>10000000.0</kp>
@@ -44,7 +48,8 @@
         <fdir1>1 0 0</fdir1>
         <maxContacts value="64"/>
     </gazebo>
-    <gazebo reference="${ns}_rear_right_wheel_link">
+    
+    <gazebo reference="rear_right_wheel_link">
         <mu1>10</mu1>
         <mu2>10</mu2>
         <kp>10000000.0</kp>
@@ -54,29 +59,41 @@
         <maxContacts value="64"/>
     </gazebo>
 
+    <!-- Skid steer drive controller plugin -->
     <gazebo>
-        <!-- <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotNamespace>/</robotNamespace>
-        </plugin> -->
-
         <plugin name="four_diff_controller" filename="libgazebo_ros_skid_steer_drive.so">
             <updateRate>100.0</updateRate>
-            <robotNamespace>${ns}</robotNamespace>
-            <leftFrontJoint>${ns}_front_left_wheel</leftFrontJoint>
-            <rightFrontJoint>${ns}_front_right_wheel</rightFrontJoint>
-            <leftRearJoint>${ns}_rear_left_wheel</leftRearJoint>
-            <rightRearJoint>${ns}_rear_right_wheel</rightRearJoint>
+            <robotNamespace>/${ns}</robotNamespace>
+            
+            <!-- Joint names - GENERIC (no namespace prefix in URDF) -->
+            <leftFrontJoint>front_left_wheel</leftFrontJoint>
+            <rightFrontJoint>front_right_wheel</rightFrontJoint>
+            <leftRearJoint>rear_left_wheel</leftRearJoint>
+            <rightRearJoint>rear_right_wheel</rightRearJoint>
+            
+            <!-- Physical parameters -->
             <wheelSeparation>0.172</wheelSeparation>
             <wheelDiameter>0.09</wheelDiameter>
-            <robotBaseFrame>${ns}_base_footprint</robotBaseFrame>
+            
+            <!-- Topic configuration (will be under /${ns}/ namespace) -->
             <commandTopic>cmd_vel</commandTopic>
-            <torque>50</torque>
-            <broadcastTF>true</broadcastTF>
             <odometryTopic>odom</odometryTopic>
-            <odometryFrame>${ns}_odom</odometryFrame> 
+            
+            <!-- CRITICAL: Frame names for TF with namespace -->
+            <!-- The plugin will publish: ${ns}/odom -> ${ns}/base_footprint -->
+            <odometryFrame>${ns}/odom</odometryFrame>
+            <robotBaseFrame>${ns}/base_footprint</robotBaseFrame>
+            
+            <!-- MUST enable TF broadcasting for odom->base_footprint -->
+            <broadcastTF>true</broadcastTF>
+            
+            <!-- Odometry covariance -->
             <covariance_x>0.000100</covariance_x>
             <covariance_y>0.000100</covariance_y>
             <covariance_yaw>0.010000</covariance_yaw>
+            
+            <!-- Torque applied to wheels -->
+            <torque>50</torque>
         </plugin>
     </gazebo>
 </robot>
