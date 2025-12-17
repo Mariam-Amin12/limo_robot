@@ -1,10 +1,7 @@
 robot_base_frame: base_footprint
-# Use the global costmap produced by move_base
-costmap_topic: move_base/global_costmap/costmap
-costmap_updates_topic: move_base/global_costmap/costmap_updates
 visualize: true
 planner_frequency: 0.4
-progress_timeout: 90.0
+progress_timeout: 60.0
 potential_scale: 3.0
 orientation_scale: 0.0
 gain_scale: 1.0

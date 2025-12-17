@@ -10,7 +10,7 @@
 
   <!-- Start Gazebo with empty world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find robotics_project_pkg)/worlds/world_2.world"/>
+    <arg name="world_name" value="$(find robotics_project_pkg)/worlds/world_3.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="$(arg gui)"/>
@@ -27,7 +27,7 @@
     <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
       <arg name="robot_name" value="robot1"/>
       <arg name="init_pose_x" value="0.5"/>
-      <arg name="init_pose_y" value="6.5"/>
+      <arg name="init_pose_y" value="0.5"/>
       <arg name="init_pose_z" value="0.0"/>
       <arg name="init_pose_yaw" value="0.0"/>
     </include>
@@ -55,7 +55,7 @@
     <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
       <arg name="robot_name" value="robot3"/>
       <arg name="init_pose_x" value="0.5"/>
-      <arg name="init_pose_y" value="11.5"/>
+      <arg name="init_pose_y" value="14.5"/>
       <arg name="init_pose_z" value="0.0"/>
       <arg name="init_pose_yaw" value="0.0"/>
     </include>

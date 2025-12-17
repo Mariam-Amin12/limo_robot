@@ -12,7 +12,7 @@ slam_toolbox:
   base_frame: base_footprint        
 
   # Topics / mode
-  scan_topic: /limo/scan      
+  # scan_topic: /limo/scan      
   mode: mapping
 
   # Timing / transforms

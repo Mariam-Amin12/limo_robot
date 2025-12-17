@@ -41,24 +41,11 @@
       <rosparam file="$(find robotics_project_pkg)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
       <rosparam file="$(find robotics_project_pkg)/config/local_costmap_params.yaml" command="load" />
       <rosparam file="$(find robotics_project_pkg)/config/global_costmap_params.yaml" command="load" />
-      <rosparam file="$(find robotics_project_pkg)/config/planner.yaml" command="load" /> 
+      <rosparam file="$(find robotics_project_pkg)/config/planner_global.yaml" command="load" />
+      <rosparam file="$(find robotics_project_pkg)/config/planner_local.yaml" command="load" />
       
       <!-- Planner selection -->
-      <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
-      <!-- <param name="base_global_planner" value="global_planner/GlobalPlanner" /> -->
-      
-      <!-- Global planner configuration - allow planning through unknown space -->
-      <param name="GlobalPlanner/allow_unknown" value="true"/>
-      <param name="GlobalPlanner/use_dijkstra" value="true"/>
-      <param name="GlobalPlanner/use_quadratic" value="true"/>
-      <!-- Very large tolerance for tight corridors -->
-      <param name="GlobalPlanner/default_tolerance" value="1.0"/>
-      <!-- Reduced cost factor to allow paths closer to obstacles -->
-      <!-- <param name="GlobalPlanner/cost_factor" value="2.0"/> -->
-      
-      <!-- Transform tolerance for TF lookups -->
-      <param name="transform_tolerance" value="0.5"/>
-      
+      <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />     
       <!-- Frame configuration -->
       <!-- Use 'world' as the root TF frame -->
       <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint"/>
@@ -74,10 +61,6 @@
       <param name="global_costmap/obstacle_layer/laser_scan_sensor/topic" value="scan"/>
       <param name="local_costmap/obstacle_layer/laser_scan_sensor/topic" value="scan"/>
       
-      <!-- Increased inflation for multi-robot collision avoidance -->
-      <!-- <param name="global_costmap/inflation_layer/inflation_radius" value="0.3"/> -->
-      <!-- <param name="local_costmap/inflation_layer/inflation_radius" value="0.2"/> -->
-      <!-- <param name="global_costmap/inflation_layer/cost_scaling_factor" value="3.0"/> -->
       
       <!-- Enable verbose output for debugging -->
       <param name="clearing_rotation_allowed" value="true"/>
@@ -102,6 +85,8 @@
       <remap from="costmap" to="move_base/global_costmap/costmap"/>
       <remap from="costmap_updates" to="move_base/global_costmap/costmap_updates"/>
       <remap from="move_base" to="move_base"/>
+      <!-- Remap frontiers topic to match RViz configuration -->
+      <remap from="frontiers" to="explore_lite/frontiers"/>
       
       <!-- Enable visualization for debugging -->
       <param name="visualize" value="true"/>
