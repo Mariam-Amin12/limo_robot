@@ -53,10 +53,10 @@ TrajectoryPlannerROS:
   # CRUCIAL FOR OSCILLATION: If rotational velocity drops below this, the robot is considered stopped.
   rot_stopped_vel: 0.001     # Ensures the spinning cycle is broken by recognizing it's stopped.
   
-  occdist_scale: 0.05        # Weight for obstacle clearance (costmap distance).
+  occdist_scale: 0.003        # Weight for obstacle clearance (costmap distance).
 
   # --- 6. Planning Window ---
-  sim_time: 1.5              # How far into the future (in seconds) the planner looks to simulate trajectories.
+  sim_time: 2              # How far into the future (in seconds) the planner looks to simulate trajectories.
   recovery_behavior_enabled: true
 
 recovery_behaviors:

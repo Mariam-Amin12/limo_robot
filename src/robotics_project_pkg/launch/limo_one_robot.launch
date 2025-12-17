@@ -45,7 +45,7 @@
       
       <!-- Planner selection -->
       <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
-      <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+      <!-- <param name="base_global_planner" value="global_planner/GlobalPlanner" /> -->
       
       <!-- Global planner configuration - allow planning through unknown space -->
       <param name="GlobalPlanner/allow_unknown" value="true"/>
@@ -54,7 +54,7 @@
       <!-- Very large tolerance for tight corridors -->
       <param name="GlobalPlanner/default_tolerance" value="1.0"/>
       <!-- Reduced cost factor to allow paths closer to obstacles -->
-      <param name="GlobalPlanner/cost_factor" value="2.0"/>
+      <!-- <param name="GlobalPlanner/cost_factor" value="2.0"/> -->
       
       <!-- Transform tolerance for TF lookups -->
       <param name="transform_tolerance" value="0.5"/>
@@ -75,7 +75,7 @@
       <!-- Increased inflation for multi-robot collision avoidance -->
       <!-- <param name="global_costmap/inflation_layer/inflation_radius" value="0.3"/> -->
       <!-- <param name="local_costmap/inflation_layer/inflation_radius" value="0.2"/> -->
-      <param name="global_costmap/inflation_layer/cost_scaling_factor" value="3.0"/>
+      <!-- <param name="global_costmap/inflation_layer/cost_scaling_factor" value="3.0"/> -->
       
       <!-- Enable verbose output for debugging -->
       <param name="clearing_rotation_allowed" value="true"/>

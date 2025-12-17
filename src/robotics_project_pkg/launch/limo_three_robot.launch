@@ -19,25 +19,21 @@
     <arg name="verbose" value="true"/>
   </include>
 
-  <!-- Wait for Gazebo to be ready -->
-  <arg name="spawn_delay" default="2.0"/>
-
   <!-- Robot 1 - Bottom left corner -->
   <group>
-    <!-- Small delay to ensure Gazebo is ready -->
     <node name="spawn_delay_robot1" pkg="rosservice" type="rosservice"
           args="call --wait /gazebo/unpause_physics" output="screen"/>
     
     <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
       <arg name="robot_name" value="robot1"/>
       <arg name="init_pose_x" value="0.5"/>
-      <arg name="init_pose_y" value="0.5"/>
+      <arg name="init_pose_y" value="6.5"/>
       <arg name="init_pose_z" value="0.0"/>
       <arg name="init_pose_yaw" value="0.0"/>
     </include>
   </group>
 
-  <!-- Robot 2 - Bottom right area (spawn after delay) -->
+  <!-- Robot 2 - Bottom right area -->
   <group>
     <node name="delay_spawn_robot2" pkg="rosservice" type="rosservice"
           args="call --wait /gazebo/get_model_state robot1 ''"/>
@@ -47,11 +43,11 @@
       <arg name="init_pose_x" value="14.5"/>
       <arg name="init_pose_y" value="0.5"/>
       <arg name="init_pose_z" value="0.0"/>
-      <arg name="init_pose_yaw" value="1.57"/>
+      <arg name="init_pose_yaw" value="1.5708"/>
     </include>
   </group>
 
-  <!-- Robot 3 - Top left area (spawn after delay) -->
+  <!-- Robot 3 - Top left area -->
   <group>
     <node name="delay_spawn_robot3" pkg="rosservice" type="rosservice"
           args="call --wait /gazebo/get_model_state robot2 ''"/>
@@ -59,39 +55,17 @@
     <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
       <arg name="robot_name" value="robot3"/>
       <arg name="init_pose_x" value="0.5"/>
-      <arg name="init_pose_y" value="12.0"/>
+      <arg name="init_pose_y" value="11.5"/>
       <arg name="init_pose_z" value="0.0"/>
       <arg name="init_pose_yaw" value="0.0"/>
     </include>
   </group>
 
-  <!-- Optional: Map merge for combining maps from multiple robots -->
-  <!-- Uncomment if you have multirobot_map_merge package -->
-  
-  <node pkg="tf" type="static_transform_publisher" name="world_to_robot1_map"
-        args="0 0 0 0 0 0 world robot1/map 100" />
-  <node pkg="tf" type="static_transform_publisher" name="world_to_robot2_map"
-        args="0 0 0 0 0 0 world robot2/map 100" />
-  <node pkg="tf" type="static_transform_publisher" name="world_to_robot3_map"
-        args="0 0 0 0 0 0 world robot3/map 100" />
+  <!-- Manual Map Merger Script -->
+  <node pkg="robotics_project_pkg" type="map_merger.py" name="map_merger" output="screen"
+        launch-prefix="bash -c 'sleep 10; $0 $@'" />
 
-  <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
-      <param name="robot_map_topic" value="map"/>
-      <!-- Robot namespaces are robot1, robot2, robot3 → prefix is 'robot' -->
-      <param name="robot_namespace" value="robot"/>
-      <param name="merged_map_topic" value="map_merged"/>
-      <param name="world_frame" value="world"/>
-      <!-- We provide world -> robotX/map static TFs above, so let map_merge
-           use TF instead of requiring per-robot map_merge/init_pose_* params. -->
-      <param name="known_init_poses" value="false"/>
-      <param name="merging_rate" value="4.0"/>
-      <param name="discovery_rate" value="0.05"/>
-      <param name="estimation_rate" value="0.5"/>
-      <param name="estimation_confidence" value="1.0"/>
-  </node>
-
-
-  <!-- Launch RViz with multi-robot configuration -->
+  <!-- Launch RViz --> 
   <node name="rviz" pkg="rviz" type="rviz" required="false"
         args="-d $(find robotics_project_pkg)/rviz/multi_config.rviz"
         launch-prefix="bash -c 'sleep 5; $0 $@' "/>

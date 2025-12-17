@@ -1,0 +1,44 @@
+TebLocalPlannerROS:
+  
+  # Trajectory Configuration
+  teb_autosize: True
+  dt_ref: 0.3
+  dt_hysteresis: 0.1
+  min_samples: 3
+  max_samples: 10
+  
+  # Robot Configuration
+  max_vel_x: 0.4
+  max_vel_x_backwards: 0.2
+  max_vel_theta: 0.3
+  acc_lim_x: 0.5
+  acc_lim_theta: 0.5
+  
+  # للأماكن الضيقة - مهم جداً!
+  min_obstacle_dist: 0.15  # المسافة من العوائق
+  inflation_dist: 0.2
+  include_costmap_obstacles: True
+  costmap_obstacles_behind_robot_dist: 1.0
+  
+  # Goal Tolerance
+  xy_goal_tolerance: 0.2
+  yaw_goal_tolerance: 0.2
+  free_goal_vel: False
+  
+  # Optimization
+  no_inner_iterations: 5
+  no_outer_iterations: 4
+  optimization_activate: True
+  optimization_verbose: False
+  
+  # للمساحات الضيقة
+  weight_max_vel_x: 1.0
+  weight_max_vel_theta: 1.0
+  weight_acc_lim_x: 1.0
+  weight_acc_lim_theta: 1.0
+  weight_kinematics_nh: 1000.0
+  weight_kinematics_forward_drive: 1.0
+  weight_kinematics_turning_radius: 1.0
+  weight_optimaltime: 1.0
+  weight_obstacle: 50.0
+  weight_dynamic_obstacle: 10.0
