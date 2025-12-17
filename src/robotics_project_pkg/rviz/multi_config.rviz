@@ -7,8 +7,9 @@ Panels:
         - /Global Options1
         - /RobotModel1/Links1
         - /TF1/Tree1
-        - /Map1
         - /TF2/Frames1
+        - /robot2_frontiers1
+        - /robot3_frontiers1
       Splitter Ratio: 0.5
     Tree Height: 803
   - Class: rviz/Selection
@@ -183,8 +184,6 @@ Visualization Manager:
           Value: true
         robot1/laser_link:
           Value: true
-        robot1/map:
-          Value: true
         robot1/odom:
           Value: true
         robot1/rear_left_wheel_link:
@@ -208,8 +207,6 @@ Visualization Manager:
         robot2/inertial_link:
           Value: true
         robot2/laser_link:
-          Value: true
-        robot2/map:
           Value: true
         robot2/odom:
           Value: true
@@ -235,8 +232,6 @@ Visualization Manager:
           Value: true
         robot3/laser_link:
           Value: true
-        robot3/map:
-          Value: true
         robot3/odom:
           Value: true
         robot3/rear_left_wheel_link:
@@ -253,69 +248,66 @@ Visualization Manager:
       Show Names: true
       Tree:
         world:
-          robot1/map:
-            robot1/odom:
-              robot1/base_footprint:
-                robot1/base_link:
-                  robot1/depth_camera_link:
-                    robot1/depth_camera_depth_link:
-                      {}
-                  robot1/front_left_wheel_link:
+          robot1/odom:
+            robot1/base_footprint:
+              robot1/base_link:
+                robot1/depth_camera_link:
+                  robot1/depth_camera_depth_link:
                     {}
-                  robot1/front_right_wheel_link:
+                robot1/front_left_wheel_link:
+                  {}
+                robot1/front_right_wheel_link:
+                  {}
+                robot1/imu_link:
+                  {}
+                robot1/inertial_link:
+                  {}
+                robot1/laser_link:
+                  {}
+                robot1/rear_left_wheel_link:
+                  {}
+                robot1/rear_right_wheel_link:
+                  {}
+          robot2/odom:
+            robot2/base_footprint:
+              robot2/base_link:
+                robot2/depth_camera_link:
+                  robot2/depth_camera_depth_link:
                     {}
-                  robot1/imu_link:
+                robot2/front_left_wheel_link:
+                  {}
+                robot2/front_right_wheel_link:
+                  {}
+                robot2/imu_link:
+                  {}
+                robot2/inertial_link:
+                  {}
+                robot2/laser_link:
+                  {}
+                robot2/rear_left_wheel_link:
+                  {}
+                robot2/rear_right_wheel_link:
+                  {}
+          robot3/odom:
+            robot3/base_footprint:
+              robot3/base_link:
+                robot3/depth_camera_link:
+                  robot3/depth_camera_depth_link:
                     {}
-                  robot1/inertial_link:
-                    {}
-                  robot1/laser_link:
-                    {}
-                  robot1/rear_left_wheel_link:
-                    {}
-                  robot1/rear_right_wheel_link:
-                    {}
-          robot2/map:
-            robot2/odom:
-              robot2/base_footprint:
-                robot2/base_link:
-                  robot2/depth_camera_link:
-                    robot2/depth_camera_depth_link:
-                      {}
-                  robot2/front_left_wheel_link:
-                    {}
-                  robot2/front_right_wheel_link:
-                    {}
-                  robot2/imu_link:
-                    {}
-                  robot2/inertial_link:
-                    {}
-                  robot2/laser_link:
-                    {}
-                  robot2/rear_left_wheel_link:
-                    {}
-                  robot2/rear_right_wheel_link:
-                    {}
-          robot3/map:
-            robot3/odom:
-              robot3/base_footprint:
-                robot3/base_link:
-                  robot3/depth_camera_link:
-                    robot3/depth_camera_depth_link:
-                      {}
-                  robot3/front_left_wheel_link:
-                    {}
-                  robot3/front_right_wheel_link:
-                    {}
-                  robot3/imu_link:
-                    {}
-                  robot3/inertial_link:
-                    {}
-                  robot3/laser_link:
-                    {}
-                  robot3/rear_left_wheel_link:
-                    {}
-                  robot3/rear_right_wheel_link:
-                    {}
+                robot3/front_left_wheel_link:
+                  {}
+                robot3/front_right_wheel_link:
+                  {}
+                robot3/imu_link:
+                  {}
+                robot3/inertial_link:
+                  {}
+                robot3/laser_link:
+                  {}
+                robot3/rear_left_wheel_link:
+                  {}
+                robot3/rear_right_wheel_link:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -478,6 +470,30 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /robot1/explore/frontiers
+      Name: robot1_frontiers
+      Namespaces:
+        frontiers: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /robot2/explore/frontiers
+      Name: robot2_frontiers
+      Namespaces:
+        frontiers: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /robot3/explore/frontiers
+      Name: robot3_frontiers
+      Namespaces:
+        frontiers: true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -506,7 +522,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 37.45387649536133
+      Distance: 66.00653076171875
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -522,9 +538,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 1.449796438217163
       Target Frame: <Fixed Frame>
-      Yaw: 3.1572086811065674
+      Yaw: 4.577208518981934
     Saved: ~
 Window Geometry:
   Displays:
