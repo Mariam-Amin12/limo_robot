@@ -17,8 +17,8 @@ class MapMerger:
         # These are the differences in spawn positions
         self.robot_offsets = {
             'robot1': {'x': 0.0, 'y': 0.0},           # Reference robot
-            'robot2': {'x': 14.0, 'y': -6.0},         # 14.5-0.5=14, 0.5-6.5=-6
-            'robot3': {'x': 0.0, 'y': 5.0}            # 0.5-0.5=0, 11.5-6.5=5
+            'robot2': {'x': 0.0, 'y': 0.0},         # 14.5-0.5=14, 0.5-6.5=-6
+            'robot3': {'x': 0.0, 'y': 0.0}            # 0.5-0.5=0, 11.5-6.5=5
         }
         
         # Store received maps
