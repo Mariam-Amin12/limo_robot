@@ -1,11 +1,22 @@
 local_costmap:
-
-  update_frequency: 5.0
+  global_frame: map
+  robot_base_frame: base_footprint
+  update_frequency: 2.0
   publish_frequency: 2.0
-  rolling_window: true
-  obstacle_range: 2.5
-  raytrace_range: 2.5
   static_map: false
-  width: 2.5
-  height: 2.5
-  resolution: 0.02  
+  rolling_window: true
+  width: 4.5
+  height: 4.5
+  resolution: 0.05
+  transform_tolerance: 0.5
+  # Increased inflation for local costmap to prevent collisions
+  inflation_radius:     0.2
+  plugins:
+   - {name: static_layer,        type: "costmap_2d::StaticLayer"}
+   - {name: obstacle_layer,      type: "costmap_2d::ObstacleLayer"}
+   - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}
+  
+  # Override obstacle_layer settings for local costmap
+  # Don't track unknown space in local costmap to allow rotate recovery to work
+  obstacle_layer:
+    track_unknown_space: false

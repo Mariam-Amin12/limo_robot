@@ -92,6 +92,24 @@
       <param name="visualize" value="true"/>
     </node>
 
+<!-- Target Box Detector Node -->
+    <!-- This node must be inside the <group ns="$(arg robot_name)"> section -->
+    <node pkg="robotics_project_pkg" type="target_detector.py" name="target_box_detector" output="screen" respawn="false">
+      <!-- Remap from the hardcoded topic to the actual robot camera topic -->
+      <remap from="/limo/color/image_raw" to="camera_ir/color/image_raw"/>
+      
+      <!-- Set the camera topic parameter (relative path within namespace) -->
+      <param name="camera_topic" value="camera_ir/color/image_raw"/>
+      
+      <!-- Output topics (already relative to namespace) -->
+      <remap from="target_detected" to="target_detected"/>
+      <remap from="detection_status" to="detection_status"/>
+      <remap from="debug_image" to="debug_image"/>
+      
+      <!-- Enable verbose logging -->
+      <param name="debug" value="true"/>
+    </node>
+
   </group>
 
   <!-- SLAM Toolbox - run outside the per-robot namespace.
