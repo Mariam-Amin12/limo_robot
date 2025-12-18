@@ -4,20 +4,20 @@ TrajectoryPlannerROS:
   # --- 1. Velocity and Motion Limits ---
             # Minimum translational speed (m/s). Keeps robot moving.
   # ADJUSTMENT 1: Decreased max_vel_x slightly to reduce required stopping distance
-  max_vel_x: 0.4
-  min_vel_x: 0.1
+  max_vel_x: 0.3
+  min_vel_x: 0.08
            # Maximum translational speed (m/s). Was 0.3.
-  min_vel_theta: -1.0        # Minimum rotational speed (rad/s).
-  max_vel_theta: 1.0         # Maximum rotational speed (rad/s).
-  min_in_place_vel_theta: 0.5 # Minimum speed for rotating in place. A decent value.
+  min_vel_theta: -0.8        # Minimum rotational speed (rad/s).
+  max_vel_theta: 0.8         # Maximum rotational speed (rad/s).
+  min_in_place_vel_theta: 0.3 # Minimum speed for rotating in place. A decent value.
   escape_vel: -0.1           # Speed used when escaping from an obstacle (negative for backwards motion).
   holonomic_robot: false
   latch_xy_goal_tolerance: false
   # --- 2. Acceleration Limits ---
-  acc_lim_theta: 1.0         # Maximum rotational acceleration (rad/s^2).
-  acc_lim_x: 1.0             # Maximum translational acceleration (m/s^2).
+  acc_lim_theta: 0.8         # Maximum rotational acceleration (rad/s^2).
+  acc_lim_x: 0.8             # Maximum translational acceleration (m/s^2).
 
-  sim_time: 1.0
+  sim_time: 1.5
   sim_granularity: 0.02
   angular_sim_granularity: 0.02
   vx_samples: 10
@@ -34,7 +34,7 @@ TrajectoryPlannerROS:
   publish_cost_grid_pc: true 
 
 
-  oscillation_reset_dist: 0.25 #How far the robot must travel in meters before oscillation flags are reset (double, default: 0.05)
+  oscillation_reset_dist: 0.15 #How far the robot must travel in meters before oscillation flags are reset (double, default: 0.05)
   escape_reset_dist: 0.1
   escape_reset_theta: 0.1
 
