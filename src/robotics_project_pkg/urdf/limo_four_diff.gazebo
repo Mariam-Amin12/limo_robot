@@ -62,7 +62,7 @@
     <!-- Skid steer drive controller plugin -->
     <gazebo>
         <plugin name="four_diff_controller" filename="libgazebo_ros_skid_steer_drive.so">
-            <updateRate>100.0</updateRate>
+            <updateRate>50.0</updateRate>
             <robotNamespace>/${ns}</robotNamespace>
             
             <!-- Joint names - GENERIC (no namespace prefix in URDF) -->

@@ -17,14 +17,14 @@ TrajectoryPlannerROS:
   acc_lim_theta: 0.8         # Maximum rotational acceleration (rad/s^2).
   acc_lim_x: 0.8             # Maximum translational acceleration (m/s^2).
 
-  sim_time: 1.5
+  sim_time: 2
   sim_granularity: 0.02
   angular_sim_granularity: 0.02
-  vx_samples: 10
-  vtheta_samples: 20
+  vx_samples: 8
+  vtheta_samples: 12
   controller_frequency: 20.0
 
-  pdist_scale: 2.5  #     The weighting for how much the controller should stay close to the path it was given . default 0.6
+  pdist_scale: 2.0  #     The weighting for how much the controller should stay close to the path it was given . default 0.6
   gdist_scale: 1.0 # 
 
   heading_lookahead: 0.325  #How far to look ahead in meters when scoring different in-place-rotation trajectories
@@ -34,12 +34,12 @@ TrajectoryPlannerROS:
   publish_cost_grid_pc: true 
 
 
-  oscillation_reset_dist: 0.15 #How far the robot must travel in meters before oscillation flags are reset (double, default: 0.05)
+  oscillation_reset_dist: 0.1 #How far the robot must travel in meters before oscillation flags are reset (double, default: 0.05)
   escape_reset_dist: 0.1
   escape_reset_theta: 0.1
 
   # --- 4. Goal Reaching Tolerances ---
-  xy_goal_tolerance: 0.1     # Distance threshold to consider the X,Y goal reached (0.1m).
+  xy_goal_tolerance: 0.2     # Distance threshold to consider the X,Y goal reached (0.1m).
   yaw_goal_tolerance: 0.2    # Angular threshold to consider the orientation goal reached (0.2 rad).
 
   # --- 5. Scoring and Bias (Cost Function Weights) ---

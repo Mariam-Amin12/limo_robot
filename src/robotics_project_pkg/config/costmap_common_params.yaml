@@ -7,18 +7,18 @@
 # Calculated footprint including all wheels and base
 footprint: [[-0.145, -0.11], [-0.145, 0.11], [0.145, 0.11], [0.145, -0.11]]
 # Add padding for multi-robot collision avoidance
-footprint_padding: 0.05
+footprint_padding: 0.02
 
 transform_tolerance: 0.5
-map_type: costmap
+
 
 always_send_full_costmap: true
 
 obstacle_layer:
  enabled: true
  # Increased ranges for better multi-robot collision avoidance
- obstacle_range: 5.0
- raytrace_range: 6.0
+ obstacle_range: 3.0
+ raytrace_range: 4.0
  inflation_radius: 0.3
  track_unknown_space: true
  combination_method: 1
