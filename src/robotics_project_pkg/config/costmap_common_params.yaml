@@ -17,8 +17,8 @@ always_send_full_costmap: true
 obstacle_layer:
  enabled: true
  # Increased ranges for better multi-robot collision avoidance
- obstacle_range: 3.0
- raytrace_range: 4.0
+ obstacle_range: 4.0
+ raytrace_range: 5.0
  inflation_radius: 0.3
  track_unknown_space: true
  combination_method: 1
