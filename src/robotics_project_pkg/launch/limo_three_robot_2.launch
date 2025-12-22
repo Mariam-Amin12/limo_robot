@@ -1,0 +1,67 @@
+<launch>
+  <!-- GUI argument for Gazebo -->
+  <arg name="gui" default="true"/>
+  
+  <!-- Use simulation time -->
+  <param name="use_sim_time" value="true"/>
+  
+  <!-- Set Gazebo model path -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find robotics_project_pkg)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+
+  <!-- Start Gazebo with empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find robotics_project_pkg)/worlds/world_3.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+    <arg name="verbose" value="true"/>
+  </include>
+
+  <!-- Robot 1 - Bottom left corner -->
+  <group>
+    <node name="spawn_delay_robot1" pkg="rosservice" type="rosservice"
+          args="call --wait /gazebo/unpause_physics" output="screen"/>
+    
+    <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
+      <arg name="robot_name" value="robot1"/>
+      <arg name="init_pose_x" value="0.5"/>
+      <arg name="init_pose_y" value="0.5"/>
+      <arg name="init_pose_z" value="0.0"/>
+      <arg name="init_pose_yaw" value="0.0"/>
+    </include>
+  </group>
+
+  <!-- Robot 2 - Bottom right area -->
+  <group>
+    <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
+      <arg name="robot_name" value="robot2"/>
+      <arg name="init_pose_x" value="0.5"/>
+      <arg name="init_pose_y" value="14.5"/>
+      <arg name="init_pose_z" value="0.0"/>
+      <arg name="init_pose_yaw" value="1.57"/>
+    </include>
+  </group>
+
+  <!-- Robot 3 - Top left area -->
+  <group>
+    <include file="$(find robotics_project_pkg)/launch/limo_one_robot.launch">
+      <arg name="robot_name" value="robot3"/>
+      <arg name="init_pose_x" value="14.5"/>
+      <arg name="init_pose_y" value="0.5"/>
+      <arg name="init_pose_z" value="0.0"/>
+      <arg name="init_pose_yaw" value="0.0"/>
+    </include>
+  </group>
+
+  <!-- Manual Map Merger Script -->
+  <node pkg="robotics_project_pkg" type="map_merger.py" name="map_merger" output="screen"
+        launch-prefix="bash -c 'sleep 10; $0 $@'" />
+
+  <!-- Launch RViz --> 
+  <node name="rviz" pkg="rviz" type="rviz" required="false"
+        args="-d $(find robotics_project_pkg)/rviz/multi_config.rviz"
+        launch-prefix="bash -c 'sleep 5; $0 $@' "/>
+
+</launch>

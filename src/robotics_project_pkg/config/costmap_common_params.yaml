@@ -17,7 +17,7 @@ always_send_full_costmap: true
 obstacle_layer:
  enabled: true
  # Increased ranges for better multi-robot collision avoidance
- obstacle_range: 4.0
+ obstacle_range: 4.5
  raytrace_range: 5.0
  inflation_radius: 0.3
  track_unknown_space: true
@@ -37,3 +37,14 @@ inflation_layer:
 static_layer:
   enabled:              true
   map_topic:            "map"
+
+laser_scan_sensor:
+  sensor_frame: laser_link   
+  data_type: LaserScan
+  topic: /scan
+  marking: true               
+  clearing: true              
+  min_obstacle_height: 0.0
+  max_obstacle_height: 2.0
+  obstacle_range: 4.5
+  raytrace_range: 5.0

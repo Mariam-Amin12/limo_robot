@@ -1,7 +1,6 @@
-<?xml version="1.0" ?>
 <sdf version="1.7">
 
-  <world name="multi_robot_world">
+  <world name="world_3">
 
     <!-- Ground plane -->
     <include>
