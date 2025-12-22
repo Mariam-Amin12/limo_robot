@@ -4,6 +4,19 @@
     <xacro:arg name="robot_namespace" default="robot"/>
     <xacro:property name="ns" value="$(arg robot_namespace)"/>
 
+    <!-- Material definitions -->
+    <material name="laser_material">
+        <color rgba="0.1 0.1 0.2 1"/>
+    </material>
+    
+    <material name="depth_camera_material">
+        <color rgba="0.2 0.2 0.2 1"/>
+    </material>
+    
+    <material name="imu_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+    </material>
+
     <xacro:macro name="limo_wheel" params="parent_prefix wheel_prefix reflect *joint_pose">
         <link name="${wheel_prefix}_wheel_link">
             <inertial>

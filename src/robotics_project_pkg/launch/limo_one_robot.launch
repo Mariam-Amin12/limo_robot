@@ -7,7 +7,7 @@
 
   <group ns="$(arg robot_name)">
     <!-- Load robot description with namespace -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find robotics_project_pkg)/urdf/limo_four_diff.xacro' robot_namespace:=$(arg robot_name)" />
+    <param name="robot_description" command="$(find xacro)/xacro '$(find robotics_project_pkg)/urdf/limo_four_diff.xacro' robot_namespace:=$(arg robot_name)" />
 
     <!-- Spawn robot in Gazebo -->
     <node name="spawn_limo_model" pkg="gazebo_ros" type="spawn_model" 
@@ -110,7 +110,15 @@
       <param name="debug" value="true"/>
     </node>
 
+    <!-- Laser Filter Node -->
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find robotics_project_pkg)/config/laser_filter_config.yaml" />
+      <remap from="scan" to="scan_raw" />           <!-- input -->
+      <remap from="scan_filtered" to="scan" />      <!-- output -->
+    </node>
+
   </group>
+
 
   <!-- SLAM Toolbox - run outside the per-robot namespace.
        Each include of this launch file will start its own node with a unique name

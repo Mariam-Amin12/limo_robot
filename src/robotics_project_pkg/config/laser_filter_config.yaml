@@ -1,0 +1,44 @@
+scan_filter_chain:
+  - name: range
+    type: laser_filters/LaserScanRangeFilter
+    params:
+      use_message_range_limits: false
+      lower_threshold: 0.15        # أقل من كده = خطأ
+      upper_threshold: 10.0        # أكتر من كده = خطأ
+      lower_replacement_value: .inf
+      upper_replacement_value: .inf
+
+  - name: intensity
+    type: laser_filters/LaserScanIntensityFilter
+    params:
+      lower_threshold: 0
+      upper_threshold: 100000
+      disp_histogram: 0
+
+  - name: shadows
+    type: laser_filters/ScanShadowsFilter
+    params:
+      min_angle: 10  # degrees
+      max_angle: 170
+      neighbors: 20
+      window: 1
+
+  - name: box
+    type: laser_filters/LaserScanBoxFilter
+    params:
+      box_frame: base_footprint
+      min_x: -0.25 
+      max_x: 0.25
+      min_y: -0.25
+      max_y: 0.25
+      min_z: -1.0
+      max_z: 1.0
+      invert: true  
+
+  - name: speckle
+    type: laser_filters/LaserScanSpeckleFilter
+    params:
+      filter_type: 1  # distance filter
+      max_range: 2.0
+      max_range_difference: 0.1
+      filter_window: 2
