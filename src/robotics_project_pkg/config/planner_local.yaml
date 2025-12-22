@@ -17,7 +17,7 @@ TrajectoryPlannerROS:
   acc_lim_theta: 0.8         # Maximum rotational acceleration (rad/s^2).
   acc_lim_x: 0.8             # Maximum translational acceleration (m/s^2).
 
-  sim_time: 2
+  sim_time: 3.0               # How far to look into the future when simulating trajectories (seconds).
   sim_granularity: 0.02
   angular_sim_granularity: 0.02
   vx_samples: 8
