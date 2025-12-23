@@ -9,16 +9,16 @@ class MapMerger:
         rospy.init_node('manual_map_merger', anonymous=False)
         
         # Robot spawn positions from launch file
-        # robot1: (0.5, 6.5)   - bottom left
-        # robot2: (14.5, 0.5)  - bottom right
-        # robot3: (0.5, 11.5)  - top left
+        # robot1: (1.5, -5.0)   - bottom left
+        # robot2: (-18.5, 3.5)  - bottom right
+        # robot3: (-20.0, -0.5) - top left
         
-        # Calculate offsets relative to robot1 (reference)
-        # These are the differences in spawn positions
+        # Use actual robot positions (each robot creates its own local map centered on itself)
+        # No offset needed since each map is already centered on the robot's origin
         self.robot_offsets = {
-            'robot1': {'x': 0.0, 'y': 0.0},           # Reference robot
-            'robot2': {'x': 0.0, 'y': 0.0},         # 14.5-0.5=14, 0.5-6.5=-6
-            'robot3': {'x': 0.0, 'y': 0.0}            # 0.5-0.5=0, 11.5-6.5=5
+            'robot1': {'x': 0.0, 'y': 0.0},           # Reference - no offset
+            'robot2': {'x': 0.0, 'y': 0.0},           # No offset - uses robot2's frame
+            'robot3': {'x': 0.0, 'y': 0.0}            # No offset - uses robot3's frame
         }
         
         # Store received maps

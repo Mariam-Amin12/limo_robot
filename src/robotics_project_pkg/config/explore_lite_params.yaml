@@ -3,11 +3,11 @@ robot_base_frame: base_footprint
 costmap_topic: move_base/global_costmap/costmap
 costmap_updates_topic: move_base/global_costmap/costmap_updates
 visualize: true
-planner_frequency: 0.4
-progress_timeout: 90.0
+planner_frequency: 3.0
+progress_timeout: 180.0
 potential_scale: 3.0
 orientation_scale: 0.0
-gain_scale: 1.0
+gain_scale: 5.0
 transform_tolerance: 0.5
-min_frontier_size: 0.3
-frontier_travel_point: "closest"
+min_frontier_size: 0.05
+frontier_travel_point: "middle"
