@@ -35,7 +35,7 @@ Uses **SLAM Toolbox** for real-time mapping during autonomous exploration. **Exp
 - ✅ Accurate localization 
 - ✅ Complete environment coverage
 
-![alt text](Demo_Map.jpeg)
+<img width="433" height="468" alt="image" src="https://github.com/user-attachments/assets/e297e69d-555d-40fe-9f57-e2d54f020e28" />
 
 ![alt text](<Video Project-1.gif>)
 
