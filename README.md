@@ -32,7 +32,7 @@ Uses **SLAM Toolbox** for real-time mapping during autonomous exploration. **Exp
 
 ![alt text](Demo_Map.jpeg)
 
-<video controls src="Video Project.mp4" title="Navigation Video"></video>
+![alt text](<Video Project-1.gif>)
 
 ## 5. Multi-Robot Simulation
 
